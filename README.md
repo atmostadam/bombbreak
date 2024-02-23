@@ -1,6 +1,6 @@
 # Bomb Break
 
-My take on the Old School 'Breakout' game with influences from Pong, Space Invaders and other Old School Video Games.
+My take on the Old School 'Breakout' game in Vanilla JavaScript with influences from Pong, Space Invaders and other Old School Video Games. License is MIT except on the public domain images listed in the attributions section which are Public Domain CC0.
 
 # Attributions:
 
