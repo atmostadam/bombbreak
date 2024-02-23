@@ -2,30 +2,45 @@ import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
 import { Grid } from "../model/Grid.js";
 import { MouseListener } from "./../listener/MouseListener.js";
 
+const images = new Map();
+
+export async function loadImage(url) {
+    new Promise(
+        response => {
+            let image = new Image();
+            image.onload = (() => response(image));
+            image.src = url;
+        }
+    )
+        .then(response => images.set(url, response))
+        .catch(e => console.error(e));
+}
+
 /**
  * The context for the game in reference to Inversion of Control, Shared Map Key/Values and Singleton
  * class lookup.
  */
 export class GameContext {
-    constructor() {
-        this.canvas = document.getElementById("game-canvas");
-        this.ctx = this.canvas.getContext("2d");
+    constructor(canvas, ctx) {
+        this.canvas = canvas;
+        this.ctx = ctx;
         this.mouseListener = new MouseListener(this);
         this.map = new Map();
-        this.imageMap = new Map();
         this.levelConfiguration = new LevelConfiguration();
         this.grid = new Grid(this, 1);
 
         this.WIDTH_BUFFER = 18;
         this.HEIGHT_BUFFER = 30;
+
+        this.clear();
     }
 
     putImage(url, image) {
-        this.imageMap.set(url, image);
+        images.set(url, image);
     }
 
     getImage(url) {
-        return this.imageMap.get(url);
+        return images.get(url);
     }
 
     getMouseListener() {
@@ -41,16 +56,29 @@ export class GameContext {
     }
 
     clear() {
+        let canvasW = this.canvas.width;
+        let canvasH = this.canvas.height;
+        let clientW = this.canvas.getBoundingClientRect().width;
+        let clientH = this.canvas.getBoundingClientRect().height;
+
+        if (canvasW != clientW || canvasH != clientH) {
+            this.canvas.width = clientW;
+            this.canvas.height = clientH;
+            this.width = clientW - this.WIDTH_BUFFER;
+            this.height = clientH - this.HEIGHT_BUFFER;
+        }
+
         let ctx = this.getCtx();
         ctx.clearRect(0, 0, this.getWidth(), this.getHeight());
+
     }
 
     getWidth() {
-        return this.canvas.getBoundingClientRect().width - this.WIDTH_BUFFER;
+        return this.width;
     }
 
     getHeight() {
-        return this.canvas.getBoundingClientRect().height - this.HEIGHT_BUFFER;
+        return this.height;
     }
 
     getLeft() {
@@ -75,5 +103,9 @@ export class GameContext {
 
     getHeightPercent(percent) {
         return this.getHeight() * (percent / 100);
+    }
+
+    getCtx() {
+        return this.ctx;
     }
 }

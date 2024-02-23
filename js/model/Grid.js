@@ -6,8 +6,8 @@ export class Grid {
         this.level = level;
         this.numberOfRows = 30;
         this.numberOfColumns = 20;
-        this.columnPercentArray = this.percentArray(this.numberOfColumns);
-        this.rowPercentArray = this.percentArray(this.numberOfRows);
+        this.wPercent = 100 / this.numberOfColumns;
+        this.hPercent = 100 / this.numberOfRows;
         this.grid = this.createGrid(level);
     }
 
@@ -35,15 +35,25 @@ export class Grid {
         return this.grid[row][column];
     }
 
+    set(row, column, instance) {
+        this.grid[row][column] = instance;
+    }
+
     createGrid(levelNumber) {
         let grid = [];
-        let level = this.context.getLevelConfiguration().getLevel(levelNumber, this.numberOfRows);
+        let level = this.context.getLevelConfiguration()
+            .getLevel(levelNumber, this.numberOfRows, this.numberOfColumns);
         for (let r = 0; r < this.numberOfRows; r++) {
             let row = [];
             for (let c = 0; c < this.numberOfColumns; c++) {
                 switch (level[r][c]) {
                     case "Y":
-                        row.push(new YellowBrick());
+                        row.push(new YellowBrick(
+                            this.context,
+                            this.wPercent * c,
+                            this.hPercent * r,
+                            this.wPercent,
+                            this.hPercent));
                         break;
                     case 0:
                         text = "Today is Sunday";
@@ -55,14 +65,6 @@ export class Grid {
             grid.push(row);
         }
         return grid;
-    }
-
-    percentArray(number) {
-        let arr = [];
-        for (let i = 0; i < number; i++) {
-            arr.push(100 / number);
-        }
-        return arr;
     }
 
     getNumberOfRows() {
