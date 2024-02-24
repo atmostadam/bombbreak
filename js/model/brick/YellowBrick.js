@@ -1,4 +1,5 @@
-import { loadImage } from "./../context/GameContext.js";
+import { GreenBrick } from "./GreenBrick.js";
+import { loadImage } from "../../context/GameContext.js";
 
 const SRC = "./images/opensourcecc/screamingbrainstudios/Colored_Yellow-64x32.png"
 await loadImage(SRC);
@@ -15,8 +16,6 @@ export class YellowBrick {
         this.IY = 0;
         this.W = 64;
         this.H = 32;
-
-        this.setHp(2);
     }
 
     update() {
@@ -24,16 +23,6 @@ export class YellowBrick {
     }
 
     draw() {
-        console.warn(this.context.getImage(SRC),
-            this.IX,
-            this.IY,
-            this.W,
-            this.H,
-            this.getX(),
-            this.getY(),
-            this.getSw(),
-            this.getSh(), this);
-
         let ctx = this.context.getCtx();
         ctx.drawImage(
             this.context.getImage(SRC),
@@ -52,13 +41,15 @@ export class YellowBrick {
         return this.context.getImage(SRC);
     }
 
-    decreaseHp() {
-        this.hp--;
-        //return new GreenBrickTile(this.context, this.row, this.column);
+    onHit(grid, row, column) {
+        grid.set(row, column, new GreenBrick(
+            this.context,
+            this.xPercent,
+            this.yPercent,
+            this.wPercent,
+            this.hPercent,
+        ));
     }
-
-    getHp() { return this.hp; }
-    setHp(hp) { this.hp = hp; }
 
     getX() {
         return this.context.getWidthPercent(this.xPercent);

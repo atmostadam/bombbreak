@@ -4,7 +4,7 @@ const SRC = "./images/publicdomain/public-domain-boom.png"
 await loadImage(SRC);
 
 export class Boom {
-    constructor(context, xPercent, yPercent, wPercent, hPercent) {
+    constructor(context, xPercent, yPercent, wPercent, hPercent, numberOfTicks, row, column) {
         this.context = context;
         this.xPercent = xPercent;
         this.yPercent = yPercent;
@@ -15,13 +15,30 @@ export class Boom {
         this.IY = 0;
         this.W = 1500;
         this.H = 1500;
+
+        this.numberOfTicks = numberOfTicks;
+        this.row = row;
+        this.column = column;
     }
 
-    update() {
-
+    update(tick) {
+        this.tick = tick;
+        if (!this.finalTick) {
+            this.finalTick = tick + this.numberOfTicks;
+        }
+        if (tick > this.finalTick) {
+            if (this.row &&
+                this.column &&
+                this.context.getGrid().get(this.row, this.column)) {
+                this.context.getGrid().set(this.row, this.column, null);
+            }
+        }
     }
 
     draw() {
+        if (this.tick > this.finalTick) {
+            return;
+        }
         let ctx = this.context.getCtx();
         ctx.drawImage(
             this.context.getImage(SRC),

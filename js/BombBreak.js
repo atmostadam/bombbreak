@@ -37,35 +37,19 @@ window.addEventListener("load", function () {
 export class BombBreak {
     constructor(context) {
         this.context = context;
-        this.bomb = new Bomb(this.context);
+        this.bombs = [new Bomb(this.context)];
         this.paddle = new Paddle(this.context);
     }
 
     update(tick) {
-        this.paddle.update(tick);
-        this.bomb.update(tick);
+        this.bombs.forEach(b => b.update(tick));
 
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
             for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
                 var brick = this.context.getGrid().get(rowNumber, columnNumber);
-                if (brick) {
-                    if (this.checkCollision(
-                        this.bomb.getX(),
-                        this.bomb.getY(),
-                        this.bomb.getSw() * 2,
-                        this.bomb.getSh() * 2,
-                        brick.getX(),
-                        brick.getY(),
-                        brick.getSw(),
-                        brick.getSh())) {
-                        this.context.getGrid().set(
-                            rowNumber,
-                            columnNumber,
-                            new Boom(this.context,
-                                brick.getX(),
-                                brick.getY(),
-                                brick.getSw(),
-                                brick.getSh()));
+                if (brick && !(brick instanceof Boom)) {
+                    if (this.checkCollisions(this.bombs, brick)) {
+                        break;
                     }
                 }
             }
@@ -75,17 +59,24 @@ export class BombBreak {
     }
 
     draw() {
-        this.paddle.draw();
-        this.bomb.draw();
         this.context.getGrid().draw();
+        this.bombs.forEach(b => b.draw());
+        this.paddle.draw();
     }
 
-    checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
-        return (
-            x1 < x2 + w2 &&
-            x1 + w1 > x2 &&
-            y1 < y2 + h2 &&
-            y1 + h1 > y2
-        );
+    checkCollisions(bombs, brick) {
+        bombs.forEach(b => {
+            if (this.context.checkCollision(
+                b.getX(),
+                b.getY(),
+                b.getSw(),
+                b.getSh(),
+                brick.getX(),
+                brick.getY(),
+                brick.getSw(),
+                brick.getSh())) {
+                b.onHit();
+            }
+        });
     }
 }

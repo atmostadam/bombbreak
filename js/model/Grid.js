@@ -1,4 +1,4 @@
-import { YellowBrick } from "./YellowBrick.js";
+import { YellowBrick } from "./brick/YellowBrick.js";
 
 export class Grid {
     constructor(context, level) {
@@ -11,11 +11,11 @@ export class Grid {
         this.grid = this.createGrid(level);
     }
 
-    update() {
+    update(tick) {
         for (let r = 0; r < this.numberOfRows; r++) {
             for (let c = 0; c < this.numberOfColumns; c++) {
                 if (this.grid[r][c]) {
-                    this.grid[r][c].update();
+                    this.grid[r][c].update(tick);
                 }
             }
         }

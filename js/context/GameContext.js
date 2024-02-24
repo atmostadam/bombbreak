@@ -24,7 +24,7 @@ export class GameContext {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-        this.mouseListener = new MouseListener(this);
+        new MouseListener(this);
         this.map = new Map();
         this.levelConfiguration = new LevelConfiguration();
         this.grid = new Grid(this, 1);
@@ -41,10 +41,6 @@ export class GameContext {
 
     getImage(url) {
         return images.get(url);
-    }
-
-    getMouseListener() {
-        return this.mouseListener;
     }
 
     getLevelConfiguration() {
@@ -107,5 +103,26 @@ export class GameContext {
 
     getCtx() {
         return this.ctx;
+    }
+
+    getMouseListener() {
+        return this.mouseListener;
+    }
+
+    setMouseListener(mouseListener) {
+        this.mouseListener = mouseListener;
+    }
+
+    getBoundingClientRect() {
+        return this.canvas.getBoundingClientRect();
+    }
+
+    checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return (
+            x1 < x2 + w2 &&
+            x1 + w1 > x2 &&
+            y1 < y2 + h2 &&
+            y1 + h1 > y2
+        );
     }
 }
