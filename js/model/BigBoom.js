@@ -1,32 +1,23 @@
-import { BOOM_IX, BOOM_IY, BOOM_W, BOOM_H } from "./../configuration/GameConfiguration.js";
+import { BIG_BOOM_PERCENT_WIDTH, BIG_BOOM_PERCENT_HEIGHT, BOOM_IX, BOOM_IY, BOOM_W, BOOM_H }
+    from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
 const SRC = "./images/publicdomain/public-domain-boom.png"
 await loadImage(SRC);
 
-export class Boom {
-    constructor(context, percentX, percentY, percentW, percentH, numberOfTicks, row, column) {
+export class BigBoom {
+    constructor(context, percentX, percentY) {
         this.context = context;
         this.percentX = percentX;
         this.percentY = percentY;
-        this.percentW = percentW;
-        this.percentH = percentH;
+        this.percentW = BIG_BOOM_PERCENT_WIDTH;
+        this.percentH = BIG_BOOM_PERCENT_HEIGHT;
         this.numberOfTicks = numberOfTicks;
-        this.row = row;
-        this.column = column;
     }
 
     update(tick) {
-        this.tick = tick;
         if (!this.finalTick) {
             this.finalTick = tick + this.numberOfTicks;
-        }
-        if (tick > this.finalTick) {
-            if (this.row &&
-                this.column &&
-                this.context.getGrid().get(this.row, this.column)) {
-                this.context.getGrid().set(this.row, this.column, null);
-            }
         }
         this.drawHitbox();
     }

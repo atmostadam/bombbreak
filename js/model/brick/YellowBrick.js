@@ -1,3 +1,4 @@
+import { BRICK_IX, BRICK_IY, BRICK_W, BRICK_H } from "./../../configuration/GameConfiguration.js";
 import { GreenBrick } from "./GreenBrick.js";
 import { loadImage } from "../../context/GameContext.js";
 
@@ -5,17 +6,12 @@ const SRC = "./images/opensourcecc/screamingbrainstudios/Colored_Yellow-64x32.pn
 await loadImage(SRC);
 
 export class YellowBrick {
-    constructor(context, xPercent, yPercent, wPercent, hPercent) {
+    constructor(context, percentX, percentY, percentW, percentH) {
         this.context = context;
-        this.xPercent = xPercent;
-        this.yPercent = yPercent;
-        this.wPercent = wPercent;
-        this.hPercent = hPercent;
-
-        this.IX = 0;
-        this.IY = 0;
-        this.W = 64;
-        this.H = 32;
+        this.percentX = percentX;
+        this.percentY = percentY;
+        this.percentW = percentW;
+        this.percentH = percentH;
     }
 
     update() {
@@ -26,10 +22,10 @@ export class YellowBrick {
         let ctx = this.context.getCtx();
         ctx.drawImage(
             this.context.getImage(SRC),
-            this.IX,
-            this.IY,
-            this.W,
-            this.H,
+            BRICK_IX,
+            BRICK_IY,
+            BRICK_W,
+            BRICK_H,
             this.getX(),
             this.getY(),
             this.getSw(),
@@ -44,27 +40,27 @@ export class YellowBrick {
     onHit(grid, row, column) {
         grid.set(row, column, new GreenBrick(
             this.context,
-            this.xPercent,
-            this.yPercent,
-            this.wPercent,
-            this.hPercent,
+            this.percentX,
+            this.percentY,
+            this.percentW,
+            this.percentH,
         ));
     }
 
     getX() {
-        return this.context.getWidthPercent(this.xPercent);
+        return this.context.getWidtpercentH(this.percentX);
     }
 
     getY() {
-        return this.context.getHeightPercent(this.yPercent);
+        return this.context.getHeightPercent(this.percentY);
     }
 
     getSw() {
-        return this.context.getWidthPercent(this.wPercent);
+        return this.context.getWidtpercentH(this.percentW);
     }
 
     getSh() {
-        return this.context.getHeightPercent(this.hPercent);
+        return this.context.getHeightPercent(this.percentH);
     }
 
     drawHitbox() {

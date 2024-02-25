@@ -36,10 +36,6 @@ export class Paddle {
         );
     }
 
-    onHit() {
-
-    }
-
     getX() {
         return this.context.getMouseListener().mousePositionX;
     }

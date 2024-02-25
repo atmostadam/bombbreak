@@ -6,8 +6,8 @@ export class Grid {
         this.level = level;
         this.numberOfRows = 30;
         this.numberOfColumns = 20;
-        this.wPercent = 100 / this.numberOfColumns;
-        this.hPercent = 100 / this.numberOfRows;
+        this.percentW = 100 / this.numberOfColumns;
+        this.percentH = 100 / this.numberOfRows;
         this.grid = this.createGrid(level);
     }
 
@@ -50,10 +50,10 @@ export class Grid {
                     case "Y":
                         row.push(new YellowBrick(
                             this.context,
-                            this.wPercent * c,
-                            this.hPercent * r,
-                            this.wPercent,
-                            this.hPercent));
+                            this.percentW * c,
+                            this.percentH * r,
+                            this.percentW,
+                            this.percentH));
                         break;
                     case 0:
                         text = "Today is Sunday";

@@ -1,3 +1,10 @@
+import {
+    STATE_DROPPING, STATE_BOMB, STATE_BOOM,
+    BOMB_IX, BOMB_IY, BOMB_W, BOMB_H,
+    BOMB_PERCENT_WIDTH, BOMB_PERCENT_HEIGHT,
+    BOMB_PERCENT_X, BOMB_PERCENT_Y,
+    BOMB_SPEED_PERCENT_X, BOMB_SPEED_PERCENT_Y
+} from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 import { Boom } from "./Boom.js";
 
@@ -6,68 +13,59 @@ await loadImage(SRC);
 
 export class Bomb {
     constructor(context) {
-        this.IX = 0;
-        this.IY = 0;
-        this.W = 1500;
-        this.H = 1500;
-
-        this.percentX = 45;
-        this.percentY = 1;
-        this.speedPercentX = 1.5;
-        this.speedPercentY = 1.5;
-        this.PERCENT_W = 8;
-        this.PERCENT_H = 8;
-        this.DROP_SPEED_PERCENT = 2;
-
-        this.HITBOX_PERCENT = 2;
-
         this.context = context;
+        this.percentX = BOMB_PERCENT_X;
+        this.percentY = BOMB_PERCENT_Y;
+        this.speedPercentX = BOMB_SPEED_PERCENT_X;
+        this.speedPercentY = BOMB_SPEED_PERCENT_Y;
+        this.state = STATE_DROPPING;
+        this.boom = new Boom(
+            this.context,
+            this.percentX,
+            this.percentY,
+            BOMB_PERCENT_WIDTH,
+            BOMB_PERCENT_HEIGHT,
+            20);
     }
 
     update(tick) {
         this.drawHitbox();
-        if (!this.dropped) {
+        if (STATE_DROPPING == this.state) {
             this.dropUntilTouchingPaddle();
-            return;
-        }
-        this.bounceIfTouchingPaddle();
-        this.bounceIfTouchingLeft();
-        this.bounceIfTouchingRight();
-        this.bounceIfTouchingTop();
-        this.bounceIfTouchingBottom();
-        this.percentX += this.speedPercentX;
-        this.percentY -= this.speedPercentY;
-        if (this.explosion) {
-            this.explosion.update(tick);
-        }
-        if (this.boom) {
+        } else if (STATE_BOMB == this.state) {
+            this.bounceIfTouchingPaddle();
+            this.bounceIfTouchingLeft();
+            this.bounceIfTouchingRight();
+            this.bounceIfTouchingTop();
+            this.bounceIfTouchingBottom();
+            this.percentX += this.speedPercentX;
+            this.percentY -= this.speedPercentY;
+        } else if (STATE_BOOM == this.state) {
             this.boom.update(tick);
         }
     }
 
     draw() {
-        let ctx = this.context.getCtx();
-        ctx.drawImage(
-            this.context.getImage(SRC),
-            this.IX,
-            this.IY,
-            this.W,
-            this.H,
-            this.getX(),
-            this.getY(),
-            this.getSw(),
-            this.getSh()
-        );
-        if (this.explosion) {
-            this.explosion.draw();
-        }
-        if (this.boom) {
+        if (STATE_DROPPING == this.state || STATE_BOMB == this.state) {
+            let ctx = this.context.getCtx();
+            ctx.drawImage(
+                this.context.getImage(SRC),
+                BOMB_IX,
+                BOMB_IY,
+                BOMB_W,
+                BOMB_H,
+                this.getX() - (this.getSw() * .2),
+                this.getY() - (this.getSh() * .2),
+                this.getSw() * 1.2,
+                this.getSh() * 1.2
+            );
+        } else if (this.state == STATE_BOOM) {
             this.boom.draw();
         }
     }
 
     onHit() {
-        if (!this.dropped) {
+        if (this.state != STATE_BOMB) {
             return;
         }
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
@@ -84,25 +82,16 @@ export class Bomb {
                         brick.getSw(),
                         brick.getSh())) {
                         brick.onHit(this.context.getGrid(), rowNumber, columnNumber);
+                        this.state = STATE_BOOM;
                     }
                 }
             }
         }
-
-        this.boom = new Boom(
-            this.context,
-            this.percentX - (this.PERCENT_W * 2.5),
-            this.percentY,
-            this.PERCENT_W * 3,
-            this.PERCENT_H * 3,
-            20);
-
-        this.reset();
     }
 
     dropUntilTouchingPaddle() {
         if (this.bounceIfTouchingPaddle()) {
-            this.dropped = true;
+            this.state = STATE_BOMB;
         }
         this.percentY += this.speedPercentY;
     }
@@ -158,7 +147,7 @@ export class Bomb {
     }
 
     getX() {
-        return this.context.getWidthPercent(this.percentX);
+        return this.context.getWidtpercentH(this.percentX);
     }
 
     getY() {
@@ -166,17 +155,11 @@ export class Bomb {
     }
 
     getSw() {
-        return this.context.getHeightPercent(this.PERCENT_W);
+        return this.context.getHeightPercent(BOMB_PERCENT_WIDTH);
     }
 
     getSh() {
-        return this.context.getHeightPercent(this.PERCENT_H);
-    }
-
-    reset() {
-        this.percentX = 45;
-        this.percentY = 1;
-        this.dropped = false;
+        return this.context.getHeightPercent(BOMB_PERCENT_HEIGHT);
     }
 
     drawHitbox() {

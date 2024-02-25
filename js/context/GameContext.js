@@ -29,9 +29,6 @@ export class GameContext {
         this.levelConfiguration = new LevelConfiguration();
         this.grid = new Grid(this, 1);
 
-        this.WIDTH_BUFFER = 18;
-        this.HEIGHT_BUFFER = 30;
-
         this.clear();
     }
 
@@ -60,8 +57,8 @@ export class GameContext {
         if (canvasW != clientW || canvasH != clientH) {
             this.canvas.width = clientW;
             this.canvas.height = clientH;
-            this.width = clientW - this.WIDTH_BUFFER;
-            this.height = clientH - this.HEIGHT_BUFFER;
+            this.width = clientW;
+            this.height = clientH;
         }
 
         let ctx = this.getCtx();
@@ -93,7 +90,7 @@ export class GameContext {
         return this.getHeight();
     }
 
-    getWidthPercent(percent) {
+    getWidtpercentH(percent) {
         return this.getWidth() * (percent / 100);
     }
 
