@@ -117,6 +117,14 @@ export class GameContext {
         return this.canvas.getBoundingClientRect();
     }
 
+    getPaddle() {
+        return this.paddle;
+    }
+
+    setPaddle(paddle) {
+        this.paddle = paddle;
+    }
+
     checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
         return (
             x1 < x2 + w2 &&
@@ -124,5 +132,14 @@ export class GameContext {
             y1 < y2 + h2 &&
             y1 + h1 > y2
         );
+    }
+
+    drawHitbox() {
+        let ctx = this.getCtx();
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "Orange";
+        ctx.rect(this.getLeft, this.getRight(), this.getTop(), this.getBottom());
+        ctx.stroke();
     }
 }

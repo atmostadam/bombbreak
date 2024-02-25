@@ -33,6 +33,7 @@ export class Boom {
                 this.context.getGrid().set(this.row, this.column, null);
             }
         }
+        this.drawHitbox();
     }
 
     draw() {
@@ -71,5 +72,14 @@ export class Boom {
 
     getSh() {
         return this.context.getHeightPercent(this.hPercent);
+    }
+
+    drawHitbox() {
+        let ctx = this.context.getCtx();
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "Orange";
+        ctx.rect(this.getX(), this.getY(), this.getSw(), this.getSh());
+        ctx.stroke();
     }
 }

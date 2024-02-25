@@ -37,12 +37,16 @@ window.addEventListener("load", function () {
 export class BombBreak {
     constructor(context) {
         this.context = context;
-        this.bombs = [new Bomb(this.context)];
+        this.bombs = [];
+        this.newBomb();
         this.paddle = new Paddle(this.context);
+        this.context.setPaddle(this.paddle);
     }
 
     update(tick) {
+        this.context.drawHitbox();
         this.bombs.forEach(b => b.update(tick));
+        this.paddle.update(tick);
 
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
             for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
@@ -62,6 +66,10 @@ export class BombBreak {
         this.context.getGrid().draw();
         this.bombs.forEach(b => b.draw());
         this.paddle.draw();
+    }
+
+    newBomb() {
+        this.bombs.push(new Bomb(this.context));
     }
 
     checkCollisions(bombs, brick) {

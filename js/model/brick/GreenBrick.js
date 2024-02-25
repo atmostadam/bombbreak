@@ -19,7 +19,7 @@ export class GreenBrick {
     }
 
     update() {
-
+        this.drawHitbox();
     }
 
     draw() {
@@ -68,5 +68,14 @@ export class GreenBrick {
 
     getSh() {
         return this.context.getHeightPercent(this.hPercent);
+    }
+
+    drawHitbox() {
+        let ctx = this.context.getCtx();
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "White";
+        ctx.rect(this.getX(), this.getY(), this.getSw(), this.getSh());
+        ctx.stroke();
     }
 }

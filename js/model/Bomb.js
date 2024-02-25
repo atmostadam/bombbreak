@@ -12,11 +12,12 @@ export class Bomb {
         this.H = 1500;
 
         this.percentX = 45;
-        this.percentY = 90;
-        this.speedPercentX = 1;
-        this.speedPercentY = 1;
+        this.percentY = 1;
+        this.speedPercentX = 1.5;
+        this.speedPercentY = 1.5;
         this.PERCENT_W = 8;
         this.PERCENT_H = 8;
+        this.DROP_SPEED_PERCENT = 2;
 
         this.HITBOX_PERCENT = 2;
 
@@ -24,12 +25,16 @@ export class Bomb {
     }
 
     update(tick) {
-        if (!this.bounceIfTouchingLeft()) {
-            this.bounceIfTouchingRight();
+        this.drawHitbox();
+        if (!this.dropped) {
+            this.dropUntilTouchingPaddle();
+            return;
         }
-        if (!this.bounceIfTouchingTop()) {
-            this.bounceIfTouchingBottom();
-        }
+        this.bounceIfTouchingPaddle();
+        this.bounceIfTouchingLeft();
+        this.bounceIfTouchingRight();
+        this.bounceIfTouchingTop();
+        this.bounceIfTouchingBottom();
         this.percentX += this.speedPercentX;
         this.percentY -= this.speedPercentY;
         if (this.explosion) {
@@ -62,15 +67,18 @@ export class Bomb {
     }
 
     onHit() {
+        if (!this.dropped) {
+            return;
+        }
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
             for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
                 var brick = this.context.getGrid().get(rowNumber, columnNumber);
                 if (brick && !(brick instanceof Boom)) {
                     if (this.context.checkCollision(
-                        this.getX() - (this.getSw() * 3),
-                        this.getY() - (this.getSh() * 3),
-                        this.getSw() * 6,
-                        this.getSh() * 6,
+                        this.getX(),
+                        this.getY(),
+                        this.getSw(),
+                        this.getSh(),
                         brick.getX(),
                         brick.getY(),
                         brick.getSw(),
@@ -83,34 +91,54 @@ export class Bomb {
 
         this.boom = new Boom(
             this.context,
-            this.percentX - (this.PERCENT_W * 2),
-            this.percentY - (this.PERCENT_H * 2),
-            this.PERCENT_W * 8,
-            this.PERCENT_H * 8,
+            this.percentX - (this.PERCENT_W * 2.5),
+            this.percentY,
+            this.PERCENT_W * 3,
+            this.PERCENT_H * 3,
             20);
 
-        this.percentX = 45;
-        this.percentY = 90;
+        this.reset();
+    }
+
+    dropUntilTouchingPaddle() {
+        if (this.bounceIfTouchingPaddle()) {
+            this.dropped = true;
+        }
+        this.percentY += this.speedPercentY;
+    }
+
+    bounceIfTouchingPaddle() {
+        let paddle = this.context.getPaddle();
+        if (this.context.checkCollision(
+            paddle.getX(),
+            paddle.getY(),
+            paddle.getSw(),
+            paddle.getSh(),
+            this.getX(),
+            this.getY(),
+            this.getSw(),
+            this.getSh()
+        )) {
+            this.speedPercentY *= -1;
+            return true;
+        }
+        return false;
     }
 
     bounceIfTouchingLeft() {
         this.speedPercentX *= this.touchingLeft() ? -1 : 1;
-        return this.touchingLeft();
     }
 
     bounceIfTouchingRight() {
         this.speedPercentX *= this.touchingRight() ? -1 : 1;
-        return this.touchingRight();
     }
 
     bounceIfTouchingTop() {
         this.speedPercentY *= this.touchingTop() ? -1 : 1;
-        return this.touchingTop();
     }
 
     bounceIfTouchingBottom() {
         this.speedPercentY *= this.touchingBottom() ? -1 : 1;
-        return this.touchingBottom();
     }
 
     touchingLeft() {
@@ -143,5 +171,20 @@ export class Bomb {
 
     getSh() {
         return this.context.getHeightPercent(this.PERCENT_H);
+    }
+
+    reset() {
+        this.percentX = 45;
+        this.percentY = 1;
+        this.dropped = false;
+    }
+
+    drawHitbox() {
+        let ctx = this.context.getCtx();
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "Red";
+        ctx.rect(this.getX(), this.getY(), this.getSw(), this.getSh());
+        ctx.stroke();
     }
 }
