@@ -38,12 +38,16 @@ export class BombBreak {
     constructor(context) {
         this.context = context;
         this.bombs = [];
-        this.newBomb();
+        this.dropBomb();
         this.paddle = new Paddle(this.context);
+        this.context.setBombs(this.bombs);
         this.context.setPaddle(this.paddle);
     }
 
     update(tick) {
+        if (tick % 80 == 0) {
+            this.dropBomb();
+        }
         this.context.drawHitbox();
         this.bombs.forEach(b => b.update(tick));
         this.paddle.update(tick);
@@ -68,7 +72,7 @@ export class BombBreak {
         this.paddle.draw();
     }
 
-    newBomb() {
+    dropBomb() {
         this.bombs.push(new Bomb(this.context));
     }
 

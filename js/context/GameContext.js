@@ -122,6 +122,18 @@ export class GameContext {
         this.paddle = paddle;
     }
 
+    getBombs() {
+        return this.bombs
+    }
+
+    setBombs(bombs) {
+        this.bombs = bombs;
+    }
+
+    deleteBomb(bomb) {
+        this.bombs = this.bombs.filter(e => e !== bomb)
+    }
+
     checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
         return (
             x1 < x2 + w2 &&

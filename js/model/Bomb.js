@@ -3,7 +3,8 @@ import {
     BOMB_IX, BOMB_IY, BOMB_W, BOMB_H,
     BOMB_PERCENT_WIDTH, BOMB_PERCENT_HEIGHT,
     BOMB_PERCENT_X, BOMB_PERCENT_Y,
-    BOMB_SPEED_PERCENT_X, BOMB_SPEED_PERCENT_Y
+    BOMB_SPEED_PERCENT_X, BOMB_SPEED_PERCENT_Y,
+    BOOM_TICKS
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 import { Boom } from "./Boom.js";
@@ -42,6 +43,9 @@ export class Bomb {
             this.percentY -= this.speedPercentY;
         } else if (STATE_BOOM == this.state) {
             this.boom.update(tick);
+            if (tick > this.finalTick) {
+                this.context.deleteBomb(this);
+            }
         }
     }
 
@@ -83,6 +87,7 @@ export class Bomb {
                         brick.getSh())) {
                         brick.onHit(this.context.getGrid(), rowNumber, columnNumber);
                         this.state = STATE_BOOM;
+                        this.finalTick = this.tick + BOOM_TICKS
                     }
                 }
             }
