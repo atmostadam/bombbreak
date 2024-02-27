@@ -1,5 +1,3 @@
-import { GameException } from "./../exception/GameException.js";
-
 /** 
  * AWS S3 is blocking CSV fetch config files for security reasons. Fetch works fine locally, but there are
  * polices in place on AWS that prevent it from working. We now create CSV Strings instead of config files.
@@ -12,7 +10,8 @@ export class LevelConfiguration {
     }
 
     constructLevel1() {
-        return `,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+        return `
+ ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
  ,  ,  , Y, Y,  ,  ,  ,  , Y, Y,  ,  ,  , Y, Y,  ,  ,  , 
@@ -47,7 +46,10 @@ export class LevelConfiguration {
     getLevel(levelNumber, numberOfRows, numberOfColumns) {
         let rows = this.levels[levelNumber - 1].split("\n");
         let level = [];
-        for (let r = 0; r < numberOfRows; r++) {
+        for (let r = 0; r < numberOfRows + 1; r++) {
+            if (r == 0) {
+                continue;
+            }
             let columns = rows[r].split(",");
             let arr = [];
             for (let c = 0; c < numberOfColumns; c++) {

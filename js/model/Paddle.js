@@ -1,20 +1,15 @@
+import {
+    TRAMPOLINE_SRC, TRAMPOLINE_PERCENT_Y, TRAMPOLINE_PERCENT_W,
+    TRAMPOLINE_PERCENT_H, TRAMPOLINE_IX, TRAMPOLINE_IY,
+    TRAMPOLINE_W, TRAMPOLINE_H
+} from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
-const SRC = "./images/publicdomain/public-domain-trampoline.png"
-await loadImage(SRC);
+await loadImage(TRAMPOLINE_SRC);
 
 export class Paddle {
     constructor(context) {
         this.context = context;
-
-        this.IX = 0;
-        this.IY = 0;
-        this.W = 600;
-        this.H = 302;
-        this.COLOR = "green";
-        this.PERCENT_Y = 90;
-        this.PERCENT_W = 20;
-        this.PERCENT_H = 10;
     }
 
     update() {
@@ -24,11 +19,11 @@ export class Paddle {
     draw() {
         let ctx = this.context.getCtx();
         ctx.drawImage(
-            this.context.getImage(SRC),
-            this.IX,
-            this.IY,
-            this.W,
-            this.H,
+            this.context.getImage(TRAMPOLINE_SRC),
+            TRAMPOLINE_IX,
+            TRAMPOLINE_IY,
+            TRAMPOLINE_W,
+            TRAMPOLINE_H,
             this.getX(),
             this.getY(),
             this.getSw(),
@@ -41,15 +36,15 @@ export class Paddle {
     }
 
     getY() {
-        return this.context.getHeightPercent(this.PERCENT_Y);
+        return this.context.getHeightPercent(TRAMPOLINE_PERCENT_Y);
     }
 
     getSw() {
-        return this.context.getHeightPercent(this.PERCENT_W);
+        return this.context.getHeightPercent(TRAMPOLINE_PERCENT_W);
     }
 
     getSh() {
-        return this.context.getHeightPercent(this.PERCENT_H);
+        return this.context.getHeightPercent(TRAMPOLINE_PERCENT_H);
     }
 
     drawHitbox() {

@@ -1,5 +1,7 @@
 import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
+import { Bomb } from "../model/Bomb.js";
 import { Grid } from "../model/Grid.js";
+import { Paddle } from "../model/Paddle.js";
 import { MouseListener } from "./../listener/MouseListener.js";
 
 const images = new Map();
@@ -28,7 +30,8 @@ export class GameContext {
         this.map = new Map();
         this.levelConfiguration = new LevelConfiguration();
         this.grid = new Grid(this, 1);
-
+        this.bombs = [];
+        this.paddle = new Paddle(this);
         this.clear();
     }
 
@@ -128,6 +131,10 @@ export class GameContext {
 
     setBombs(bombs) {
         this.bombs = bombs;
+    }
+
+    addBomb() {
+        this.bombs.push(new Bomb(this));
     }
 
     deleteBomb(bomb) {

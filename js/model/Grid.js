@@ -1,4 +1,9 @@
-import { YellowBrick } from "./brick/YellowBrick.js";
+import { Brick } from "./Brick.js";
+import {
+    BRICK_BLUE_SRC, BRICK_GRAY_SRC, BRICK_GREEN_SRC,
+    BRICK_ORANGE_SRC, BRICK_PURPLE_SRC, BRICK_RED_SRC,
+    BRICK_YELLOW_SRC
+} from "./../configuration/GameConfiguration.js";
 
 export class Grid {
     constructor(context, level) {
@@ -46,21 +51,37 @@ export class Grid {
         for (let r = 0; r < this.numberOfRows; r++) {
             let row = [];
             for (let c = 0; c < this.numberOfColumns; c++) {
+                let brick = new Brick(
+                    this.context,
+                    this.percentW * c,
+                    this.percentH * r,
+                    this.percentW,
+                    this.percentH
+                )
                 switch (level[r][c]) {
+                    case "G":
+                        brick.setState(BRICK_GREEN_SRC);
+                        break;
                     case "Y":
-                        row.push(new YellowBrick(
-                            this.context,
-                            this.percentW * c,
-                            this.percentH * r,
-                            this.percentW,
-                            this.percentH));
+                        brick.setState(BRICK_YELLOW_SRC);
                         break;
-                    case 0:
-                        text = "Today is Sunday";
+                    case "B":
+                        brick.setState(BRICK_BLUE_SRC);
                         break;
-                    default:
-                        row.push(null);
+                    case "P":
+                        brick.setState(BRICK_PURPLE_SRC);
+                        break;
+                    case "O":
+                        brick.setState(BRICK_ORANGE_SRC);
+                        break;
+                    case "R":
+                        brick.setState(BRICK_RED_SRC);
+                        break;
+                    case "X":
+                        brick.setState(BRICK_GRAY_SRC);
+                        break;
                 }
+                row.push(brick);
             }
             grid.push(row);
         }

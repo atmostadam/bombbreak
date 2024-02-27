@@ -12,7 +12,6 @@ export class MouseListener {
         window.addEventListener('mousemove', e => {
             var rect = context.getBoundingClientRect();
             this.mousePositionX = e.clientX - rect.left;
-            //this.mousePositionY = e.clientY - rect.top;
         });
 
         context.setMouseListener(this);
