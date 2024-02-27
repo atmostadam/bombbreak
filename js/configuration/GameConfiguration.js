@@ -1,3 +1,5 @@
+export const HIGHEST_SCORE_KEY = "bomb.break.highest.score";
+export const HIGHEST_LEVEL_KEY = "bomb.break.highest.level"
 export const STATE_BOMB = "bomb";
 export const STATE_BOOM = "boom";
 export const STATE_DROPPING = "dropping";
