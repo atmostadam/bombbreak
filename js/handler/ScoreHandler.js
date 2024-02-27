@@ -1,11 +1,10 @@
 import {
-    HIGHEST_SCORE_KEY, HIGHEST_LEVEL_KEY, GAMES_PLAYED_KEY,
+    HIGHEST_SCORE_KEY, HIGHEST_LEVEL_KEY, GAMES_PLAYED_KEY
 } from "./../configuration/GameConfiguration.js";
 
 export class ScoreHandler {
     constructor(context) {
         this.context = context;
-        this.score = score;
     }
 
     increaseScore(increase) {
@@ -16,7 +15,7 @@ export class ScoreHandler {
         this.setGamesPlayed(this.getGamesPlayed() + 1);
     }
 
-    nextLevel() {
+    increaseMaxLevel() {
         this.setLevel(this.getLevel() + 1);
     }
 
@@ -28,7 +27,7 @@ export class ScoreHandler {
         return localStorage.getItem(HIGHEST_SCORE_KEY);
     }
 
-    setHiscore(highscore) {
+    setHighScore(highscore) {
         let currentHighscore = getHighScore();
         if(highscore > currentHighscore) {
             localStorage.setItem(HIGHEST_SCORE_KEY, highscore);

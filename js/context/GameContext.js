@@ -26,12 +26,16 @@ export class GameContext {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
+
         new MouseListener(this);
-        this.map = new Map();
+
         this.levelConfiguration = new LevelConfiguration();
-        this.grid = new Grid(this, 1);
+
         this.bombs = [];
+        this.map = new Map();
+        this.grid = new Grid(this, 1);
         this.paddle = new Paddle(this);
+        this.score = 0;
         this.clear();
     }
 
@@ -123,6 +127,22 @@ export class GameContext {
 
     setPaddle(paddle) {
         this.paddle = paddle;
+    }
+
+    getScore() {
+        return this.score;
+    }
+
+    setScore(score) {
+        this.score = score;
+    }
+
+    increaseScore(amount) {
+        this.score += amount;
+    }
+
+    resetScore() {
+        this.score = 0;
     }
 
     getBombs() {

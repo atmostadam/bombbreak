@@ -1,5 +1,6 @@
-import { BRICK_EMPTY } from "./configuration/GameConfiguration.js";
 import { GameContext } from "./context/GameContext.js";
+import { Bomb } from "./model/Bomb.js";
+import { Paddle } from "./model/Paddle.js";
 
 window.addEventListener("load", function () {
     const minMsPerFrame = 1000 / 60;
@@ -35,22 +36,26 @@ window.addEventListener("load", function () {
 export class BombBreak {
     constructor(context) {
         this.context = context;
-        this.context.addBomb();
+        this.bombs = [];
+        this.dropBomb();
+        this.paddle = new Paddle(this.context);
+        this.context.setBombs(this.bombs);
+        this.context.setPaddle(this.paddle);
     }
 
     update(tick) {
         if (tick % 80 == 0) {
-            this.context.addBomb();
+            this.dropBomb();
         }
         this.context.drawHitbox();
-        this.context.getBombs().forEach(bomb => bomb.update(tick));
-        this.context.getPaddle().update(tick);
+        this.bombs.forEach(b => b.update(tick));
+        this.paddle.update(tick);
 
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
             for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
                 var brick = this.context.getGrid().get(rowNumber, columnNumber);
-                if (brick && BRICK_EMPTY != brick.getState()) {
-                    if (this.checkCollisions(brick)) {
+                if (brick && BRICK_STATE_BOOM != brick.getState()) {
+                    if (this.checkCollisions(this.bombs, brick)) {
                         break;
                     }
                 }
@@ -62,22 +67,26 @@ export class BombBreak {
 
     draw() {
         this.context.getGrid().draw();
-        this.context.getBombs().forEach(bomb => bomb.draw());
-        this.context.getPaddle().draw();
+        this.bombs.forEach(b => b.draw());
+        this.paddle.draw();
     }
 
-    checkCollisions(brick) {
-        this.context.getBombs().forEach(bomb => {
+    dropBomb() {
+        this.bombs.push(new Bomb(this.context));
+    }
+
+    checkCollisions(bombs, brick) {
+        bombs.forEach(b => {
             if (this.context.checkCollision(
-                bomb.getX(),
-                bomb.getY(),
-                bomb.getSw(),
-                bomb.getSh(),
+                b.getX(),
+                b.getY(),
+                b.getSw(),
+                b.getSh(),
                 brick.getX(),
                 brick.getY(),
                 brick.getSw(),
                 brick.getSh())) {
-                bomb.onHit();
+                b.onHit();
             }
         });
     }
