@@ -1,7 +1,26 @@
+<<<<<<< HEAD
 export const BOMB_STATE_BOMB = "bomb";
 export const BOMB_STATE_BOOM = "boom";
 export const BOMB_STATE_DROPPING = "dropping";
 export const BOMB_SRC = "./images/publicdomain/public-domain-red-bomb.png";
+=======
+export const HIGHEST_SCORE_KEY = "bomb.break.highest.score";
+export const HIGHEST_LEVEL_KEY = "bomb.break.highest.level"
+export const STATE_BOMB = "bomb";
+export const STATE_BOOM = "boom";
+export const STATE_DROPPING = "dropping";
+
+export const BOOM_IX = 0;
+export const BOOM_IY = 0;
+export const BOOM_W = 1500;
+export const BOOM_H = 1500;
+export const BOOM_TICKS = 20;
+
+export const BIG_BOOM_PERCENT_WIDTH = 5;
+export const BIG_BOOM_PERCENT_HEIGHT = 10;
+export const BIG_BOOM_NUMBER_OF_TICKS = 1;
+
+>>>>>>> 3e6793767ecca172226b4171144c30060ebf9e7b
 export const BOMB_PERCENT_X = 45;
 export const BOMB_PERCENT_Y = 1;
 export const BOMB_PERCENT_WIDTH = 8;
