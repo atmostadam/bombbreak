@@ -17,6 +17,7 @@ export const BOMB_IY = 0;
 export const BOMB_W = 1500;
 export const BOMB_H = 1500;
 export const BOMB_BOOM_NUMBER_OF_TICKS = 20;
+export const BOMB_BOOM_SIZE_MULTIPLIER = 8;
 
 export const BOOM_IX = 0;
 export const BOOM_IY = 0;

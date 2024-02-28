@@ -3,7 +3,7 @@ import {
     BOMB_IY, BOMB_W, BOMB_H, BOMB_PERCENT_WIDTH, BOMB_PERCENT_HEIGHT,
     BOMB_PERCENT_X, BOMB_PERCENT_Y, BOMB_SPEED_PERCENT_X,
     BOMB_SPEED_PERCENT_Y, BOMB_BOOM_NUMBER_OF_TICKS, BRICK_EMPTY, BOMB_SRC,
-    BOOM_SRC, BOOM_IX, BOOM_IY, BOOM_W, BOOM_H
+    BOOM_SRC, BOOM_IX, BOOM_IY, BOOM_W, BOOM_H, BOMB_BOOM_SIZE_MULTIPLIER
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -59,10 +59,10 @@ export class Bomb {
                 BOOM_IY,
                 BOOM_W,
                 BOOM_H,
-                this.getX() - (this.getSw() * .2),
-                this.getY() - (this.getSh() * .2),
-                this.getSw() * 1.2,
-                this.getSh() * 1.2
+                this.getX() - (this.getSw() * 1.4),
+                this.getY() - (this.getSh() * 1.4),
+                this.getSw() * BOMB_BOOM_SIZE_MULTIPLIER,
+                this.getSh() * BOMB_BOOM_SIZE_MULTIPLIER
             );
         }
     }
@@ -72,7 +72,7 @@ export class Bomb {
             for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
                 for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
                     var brick = this.context.getGrid().get(rowNumber, columnNumber);
-                    if (brick && !(brick.getState() != BRICK_EMPTY)) {
+                    if (brick && brick.getState() != BRICK_EMPTY) {
                         if (this.context.checkCollision(
                             this.getX(),
                             this.getY(),

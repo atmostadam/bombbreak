@@ -1,7 +1,5 @@
 import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
 import { Bomb } from "../model/Bomb.js";
-import { Grid } from "../model/Grid.js";
-import { Paddle } from "../model/Paddle.js";
 import { MouseListener } from "./../listener/MouseListener.js";
 
 const images = new Map();
@@ -26,16 +24,7 @@ export class GameContext {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-
-        new MouseListener(this);
-
-        this.levelConfiguration = new LevelConfiguration();
-
-        this.bombs = [];
         this.map = new Map();
-        this.grid = new Grid(this, 1);
-        this.paddle = new Paddle(this);
-        this.score = 0;
         this.clear();
     }
 
@@ -47,12 +36,60 @@ export class GameContext {
         return images.get(url);
     }
 
+    getMouseListener() {
+        return this.mouseListener;
+    }
+
+    setMouseListener(mouseListener) {
+        this.mouseListener = mouseListener;
+    }
+
+    setLevelConfiguration(levelConfiguration) {
+        this.levelConfiguration = levelConfiguration;
+    }
+
     getLevelConfiguration() {
         return this.levelConfiguration;
     }
 
     getGrid() {
         return this.grid;
+    }
+
+    setGrid(grid) {
+        this.grid = grid;
+    }
+
+    getBombs() {
+        return this.bombs
+    }
+
+    setBombs(bombs) {
+        this.bombs = bombs;
+    }
+
+    addBomb() {
+        this.bombs.push(new Bomb(this));
+    }
+
+    deleteBomb(bomb) {
+        this.bombs = this.bombs.filter(e => e !== bomb)
+    }
+
+    getPaddle() {
+        return this.paddle;
+    }
+
+    setPaddle(paddle) {
+        this.paddle = paddle;
+    }
+
+    getScore() {
+        return this.score;
+    }
+
+    setScore(score) {
+        this.score = score;
     }
 
     clear() {
@@ -109,56 +146,8 @@ export class GameContext {
         return this.ctx;
     }
 
-    getMouseListener() {
-        return this.mouseListener;
-    }
-
-    setMouseListener(mouseListener) {
-        this.mouseListener = mouseListener;
-    }
-
     getBoundingClientRect() {
         return this.canvas.getBoundingClientRect();
-    }
-
-    getPaddle() {
-        return this.paddle;
-    }
-
-    setPaddle(paddle) {
-        this.paddle = paddle;
-    }
-
-    getScore() {
-        return this.score;
-    }
-
-    setScore(score) {
-        this.score = score;
-    }
-
-    increaseScore(amount) {
-        this.score += amount;
-    }
-
-    resetScore() {
-        this.score = 0;
-    }
-
-    getBombs() {
-        return this.bombs
-    }
-
-    setBombs(bombs) {
-        this.bombs = bombs;
-    }
-
-    addBomb() {
-        this.bombs.push(new Bomb(this));
-    }
-
-    deleteBomb(bomb) {
-        this.bombs = this.bombs.filter(e => e !== bomb)
     }
 
     checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {

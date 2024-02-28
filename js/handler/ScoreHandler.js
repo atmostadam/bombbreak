@@ -7,10 +7,6 @@ export class ScoreHandler {
         this.context = context;
     }
 
-    increaseScore(increase) {
-        this.setScore(this.getScore() + increase);
-    }
-
     increaseGamesPlayed() {
         this.setGamesPlayed(this.getGamesPlayed() + 1);
     }
@@ -19,17 +15,13 @@ export class ScoreHandler {
         this.setLevel(this.getLevel() + 1);
     }
 
-    resetScore() {
-        this.setScore(0);
-    }
-
     getHighScore() {
         return localStorage.getItem(HIGHEST_SCORE_KEY);
     }
 
     setHighScore(highscore) {
         let currentHighscore = getHighScore();
-        if(highscore > currentHighscore) {
+        if (highscore > currentHighscore) {
             localStorage.setItem(HIGHEST_SCORE_KEY, highscore);
         }
         return this;

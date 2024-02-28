@@ -56,28 +56,28 @@ export class Brick {
         switch (this.state) {
             case BRICK_GREEN_SRC:
                 this.state = BRICK_EMPTY;
-                this.context.increaseScore(BRICK_GREEN_POINTS);
+                this.context.getScore().increaseScore(BRICK_GREEN_POINTS);
                 this.finalTick = this.tick + BRICK_BOOM_NUMBER_OF_TICKS;
                 break;
             case BRICK_YELLOW_SRC:
-                this.state = BRICK_STATE_GREEN;
-                this.context.increaseScore(BRICK_YELLOW_POINTS);
+                this.state = BRICK_GREEN_SRC;
+                this.context.getScore().increaseScore(BRICK_YELLOW_POINTS);
                 break;
             case BRICK_BLUE_SRC:
                 this.state = BRICK_YELLOW_SRC;
-                this.context.increaseScore(BRICK_BLUE_POINTS);
+                this.context.getScore().increaseScore(BRICK_BLUE_POINTS);
                 break;
             case BRICK_PURPLE_SRC:
                 this.state = BRICK_BLUE_SRC;
-                this.context.increaseScore(BRICK_PURPLE_POINTS);
+                this.context.getScore().increaseScore(BRICK_PURPLE_POINTS);
                 break;
             case BRICK_ORANGE_SRC:
                 this.state = BRICK_PURPLE_SRC;
-                this.context.increaseScore(BRICK_ORANGE_POINTS);
+                this.context.getScore().increaseScore(BRICK_ORANGE_POINTS);
                 break;
             case BRICK_RED_SRC:
                 this.state = BRICK_ORANGE_SRC;
-                this.context.increaseScore(BRICK_RED_POINTS);
+                this.context.getScore().increaseScore(BRICK_RED_POINTS);
                 break;
         }
     }
