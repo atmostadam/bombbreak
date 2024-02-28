@@ -1,3 +1,4 @@
+import { BRICK_EMPTY } from "./configuration/GameConfiguration.js";
 import { GameContext } from "./context/GameContext.js";
 import { Bomb } from "./model/Bomb.js";
 import { Paddle } from "./model/Paddle.js";
@@ -54,7 +55,7 @@ export class BombBreak {
         for (let rowNumber = 0; rowNumber < this.context.getGrid().getNumberOfRows(); rowNumber++) {
             for (let columnNumber = 0; columnNumber < this.context.getGrid().getNumberOfColumns(); columnNumber++) {
                 var brick = this.context.getGrid().get(rowNumber, columnNumber);
-                if (brick && BRICK_STATE_BOOM != brick.getState()) {
+                if (brick && BRICK_EMPTY != brick.getState()) {
                     if (this.checkCollisions(this.bombs, brick)) {
                         break;
                     }
@@ -69,6 +70,7 @@ export class BombBreak {
         this.context.getGrid().draw();
         this.bombs.forEach(b => b.draw());
         this.paddle.draw();
+        this.score
     }
 
     dropBomb() {

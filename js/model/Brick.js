@@ -1,7 +1,9 @@
 import {
     BRICK_BLUE_SRC, BRICK_GRAY_SRC, BRICK_GREEN_SRC, BRICK_ORANGE_SRC,
     BRICK_PURPLE_SRC, BRICK_RED_SRC, BRICK_YELLOW_SRC, BOOM_SRC,
-    BRICK_EMPTY, BRICK_W, BRICK_H, BRICK_IX, BRICK_IY, BRICK_BOOM_NUMBER_OF_TICKS
+    BRICK_EMPTY, BRICK_W, BRICK_H, BRICK_IX, BRICK_IY, BRICK_BOOM_NUMBER_OF_TICKS,
+    BRICK_GREEN_POINTS, BRICK_YELLOW_POINTS, BRICK_BLUE_POINTS,
+    BRICK_PURPLE_POINTS, BRICK_ORANGE_POINTS, BRICK_RED_POINTS
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -53,23 +55,29 @@ export class Brick {
     onHit() {
         switch (this.state) {
             case BRICK_GREEN_SRC:
-                this.state = BOOM_SRC;
+                this.state = BRICK_EMPTY;
+                this.context.increaseScore(BRICK_GREEN_POINTS);
                 this.finalTick = this.tick + BRICK_BOOM_NUMBER_OF_TICKS;
                 break;
             case BRICK_YELLOW_SRC:
                 this.state = BRICK_STATE_GREEN;
+                this.context.increaseScore(BRICK_YELLOW_POINTS);
                 break;
             case BRICK_BLUE_SRC:
                 this.state = BRICK_YELLOW_SRC;
+                this.context.increaseScore(BRICK_BLUE_POINTS);
                 break;
             case BRICK_PURPLE_SRC:
                 this.state = BRICK_BLUE_SRC;
+                this.context.increaseScore(BRICK_PURPLE_POINTS);
                 break;
             case BRICK_ORANGE_SRC:
                 this.state = BRICK_PURPLE_SRC;
+                this.context.increaseScore(BRICK_ORANGE_POINTS);
                 break;
             case BRICK_RED_SRC:
                 this.state = BRICK_ORANGE_SRC;
+                this.context.increaseScore(BRICK_RED_POINTS);
                 break;
         }
     }
