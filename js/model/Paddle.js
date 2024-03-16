@@ -1,7 +1,11 @@
 import {
-    TRAMPOLINE_SRC, TRAMPOLINE_PERCENT_Y, TRAMPOLINE_PERCENT_W,
-    TRAMPOLINE_PERCENT_H, TRAMPOLINE_IX, TRAMPOLINE_IY,
-    TRAMPOLINE_W, TRAMPOLINE_H
+    TRAMPOLINE_H,
+    TRAMPOLINE_IX, TRAMPOLINE_IY,
+    TRAMPOLINE_PERCENT_H,
+    TRAMPOLINE_PERCENT_W,
+    TRAMPOLINE_PERCENT_Y,
+    TRAMPOLINE_SRC,
+    TRAMPOLINE_W
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -12,8 +16,8 @@ export class Paddle {
         this.context = context;
     }
 
-    update() {
-        this.drawHitbox();
+    update(tick) {
+        this.tick = tick;
     }
 
     draw() {
@@ -45,14 +49,5 @@ export class Paddle {
 
     getSh() {
         return this.context.getHeightPercent(TRAMPOLINE_PERCENT_H);
-    }
-
-    drawHitbox() {
-        let ctx = this.context.getCtx();
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "Green";
-        ctx.rect(this.getX(), this.getY(), this.getSw(), this.getSh());
-        ctx.stroke();
     }
 }

@@ -3,10 +3,10 @@ export class MouseListener {
         this.mousePositionX = context.getWidth();
 
         window.addEventListener('click', e => {
-            //var rect = context.getBoundingClientRect();
-            //const x = e.clientX - rect.left;
-            //const y = e.clientY - rect.top;
-            //context.getClickSubscribers().forEach(c => { c.onClick(x, y); });
+            var rect = context.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            context.getScreen().onClick(x, y);
         });
 
         window.addEventListener('mousemove', e => {

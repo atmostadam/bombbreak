@@ -1,8 +1,6 @@
 import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
 import { Bomb } from "../model/Bomb.js";
-import { Grid } from "../model/Grid.js";
-import { Paddle } from "../model/Paddle.js";
-import { MouseListener } from "./../listener/MouseListener.js";
+import { Score } from "../model/Score.js";
 
 const images = new Map();
 
@@ -18,25 +16,14 @@ export async function loadImage(url) {
         .catch(e => console.error(e));
 }
 
-/**
- * The context for the game in reference to Inversion of Control, Shared Map Key/Values and Singleton
- * class lookup.
- */
 export class GameContext {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-
-        new MouseListener(this);
-
-        this.levelConfiguration = new LevelConfiguration();
-
-        this.bombs = [];
         this.map = new Map();
-        this.grid = new Grid(this, 1);
-        this.paddle = new Paddle(this);
-        this.score = 0;
         this.clear();
+        this.levelConfiguration = new LevelConfiguration(this);
+        this.score = new Score(this);
     }
 
     putImage(url, image) {
@@ -47,12 +34,36 @@ export class GameContext {
         return images.get(url);
     }
 
+    getMouseListener() {
+        return this.mouseListener;
+    }
+
+    setMouseListener(mouseListener) {
+        this.mouseListener = mouseListener;
+    }
+
+    setLevelConfiguration(levelConfiguration) {
+        this.levelConfiguration = levelConfiguration;
+    }
+
     getLevelConfiguration() {
         return this.levelConfiguration;
     }
 
-    getGrid() {
-        return this.grid;
+    getScore() {
+        return this.score;
+    }
+
+    setScore(score) {
+        this.score = score;
+    }
+
+    getScreen() {
+        return this.screen;
+    }
+
+    setScreen(screen) {
+        this.screen = screen;
     }
 
     clear() {
@@ -97,7 +108,7 @@ export class GameContext {
         return this.getHeight();
     }
 
-    getWidtpercentH(percent) {
+    getWidthPercent(percent) {
         return this.getWidth() * (percent / 100);
     }
 
@@ -109,56 +120,8 @@ export class GameContext {
         return this.ctx;
     }
 
-    getMouseListener() {
-        return this.mouseListener;
-    }
-
-    setMouseListener(mouseListener) {
-        this.mouseListener = mouseListener;
-    }
-
     getBoundingClientRect() {
         return this.canvas.getBoundingClientRect();
-    }
-
-    getPaddle() {
-        return this.paddle;
-    }
-
-    setPaddle(paddle) {
-        this.paddle = paddle;
-    }
-
-    getScore() {
-        return this.score;
-    }
-
-    setScore(score) {
-        this.score = score;
-    }
-
-    increaseScore(amount) {
-        this.score += amount;
-    }
-
-    resetScore() {
-        this.score = 0;
-    }
-
-    getBombs() {
-        return this.bombs
-    }
-
-    setBombs(bombs) {
-        this.bombs = bombs;
-    }
-
-    addBomb() {
-        this.bombs.push(new Bomb(this));
-    }
-
-    deleteBomb(bomb) {
-        this.bombs = this.bombs.filter(e => e !== bomb)
     }
 
     checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
@@ -168,14 +131,5 @@ export class GameContext {
             y1 < y2 + h2 &&
             y1 + h1 > y2
         );
-    }
-
-    drawHitbox() {
-        let ctx = this.getCtx();
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "Orange";
-        ctx.rect(this.getLeft, this.getRight(), this.getTop(), this.getBottom());
-        ctx.stroke();
     }
 }

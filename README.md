@@ -1,6 +1,6 @@
 # Bomb Break
 
-My take on the Old School 'Breakout' game in Vanilla JavaScript with influences from Pong, Space Invaders and other Old School Video Games. License is MIT except on the public domain images listed in the attributions section which are Public Domain CC0.
+Vanilla JavaScript. License is Public Domain CC0.
 
 # Attributions
 
@@ -8,6 +8,7 @@ Unknown Graphic Artist - [Public Domain (CC0)](https://www.rawpixel.com/public-d
 
 * images/public-domain-bomb.png (<https://www.rawpixel.com/image/6287121/png-public-domain-black>)
 * images/public-domain-boom.png (<https://www.rawpixel.com/image/6743823/png-sticker-public-domain>)
+* images/public-domain-parachute.png (<https://www.rawpixel.com/image/7619025/png-plant-people>)
 
 Screaming Brain Studios - [Public Domain (CC0)](https://screamingbrainstudios.itch.io/)
 

@@ -1,9 +1,13 @@
-import { Brick } from "./Brick.js";
 import {
-    BRICK_BLUE_SRC, BRICK_GRAY_SRC, BRICK_GREEN_SRC,
-    BRICK_ORANGE_SRC, BRICK_PURPLE_SRC, BRICK_RED_SRC,
+    BRICK_BLUE_SRC,
+    BRICK_GRAY_SRC,
+    BRICK_GREEN_SRC,
+    BRICK_ORANGE_SRC,
+    BRICK_PURPLE_SRC,
+    BRICK_RED_SRC,
     BRICK_YELLOW_SRC
 } from "./../configuration/GameConfiguration.js";
+import { Brick } from "./Brick.js";
 
 export class Grid {
     constructor(context, level) {
