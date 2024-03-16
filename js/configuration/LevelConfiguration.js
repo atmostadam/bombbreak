@@ -3,18 +3,20 @@
 export class LevelConfiguration {
     constructor() {
         this.levels = [];
-        this.levels.push(this.constructLevel1());
+        this.levels.push(
+            this.constructLevel1()
+        );
     }
 
-    constructLevel1() {
+    constructLevel4() {
         return `
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
- ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
- ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
- ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
- ,  ,  ,  ,  , G, G, G, G, G, G, G, G, G, G,  ,  ,  ,  ,
- ,  ,  ,  ,  , G, G, G, G, G, G, G, G, G, G,  ,  ,  ,  ,
- ,  ,  ,  ,  , G, G, G, G, G, G, G, G, G, G,  ,  ,  ,  ,
+ ,  ,  ,  ,  ,  , G, G,  ,  , G, G,  ,  ,  ,  ,  ,  ,  ,
+ ,  ,  ,  ,  , G, B, B, G, G, B, B, G,  ,  ,  ,  ,  ,  ,
+ ,  ,  ,  ,  , G, B, R, B, B, R, B, G, ,  ,  ,  ,  ,  ,
+ ,  ,  ,  ,  ,  , G, B, R, R, B, G,  ,  ,  ,  ,  ,  ,  ,
+ ,  ,  ,  ,  ,  ,  , G  B, B, G,  , ,  ,  ,  ,  ,  ,  ,
+ ,  ,  ,  ,  ,  ,  ,  , G, G,  ,  ,  ,  ,  ,  ,  ,  ,  ,
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
@@ -40,7 +42,7 @@ export class LevelConfiguration {
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,`;
     }
 
-    constructLevel100() {
+    constructLevel4() {
         return `
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
