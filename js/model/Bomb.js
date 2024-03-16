@@ -108,29 +108,27 @@ export class Bomb {
     }
 
     dropUntilTouchingPaddle() {
-        if (this.state == BOMB_STATE_DROPPING && this.bounceIfTouchingPaddle()) {
-            this.state = BOMB_STATE_BOMB;
-            return;
+        if (this.state == BOMB_STATE_DROPPING) {
+            this.bounceIfTouchingPaddle();
         }
         this.percentY += this.speedPercentY;
     }
 
     bounceIfTouchingPaddle() {
-        let paddle = this.paddle;
         if (this.context.checkCollision(
-            paddle.getX(),
-            paddle.getY(),
-            paddle.getSw(),
-            paddle.getSh(),
+            this.paddle.getX(),
+            this.paddle.getY(),
+            this.paddle.getSw(),
+            this.paddle.getSh(),
             this.getX(),
             this.getY(),
             this.getSw(),
             this.getSh()
-        )) {
-            this.percentX += this.speedPercentX;
-            this.percentY += this.speedPercentY;
-            this.speedPercentX *= -1;
+        ) &&
+        this.getY() > this.paddle.getY() &&
+        this.getY() - this.speedPercentY < this.paddle.getY()) {
             this.speedPercentY *= -1;
+            this.state = BOMB_STATE_BOMB;
             return true;
         }
         return false;
