@@ -8,7 +8,7 @@ export class LevelConfiguration {
         );
     }
 
-    constructLevel4() {
+    constructLevel1() {
         return `
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
  ,  ,  ,  ,  ,  , G, G,  ,  , G, G,  ,  ,  ,  ,  ,  ,  ,
