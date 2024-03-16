@@ -3,10 +3,12 @@
 export class LevelConfiguration {
     constructor() {
         this.levels = [];
-        this.levels.push(this.constructLevel1());
+        this.levels.push(
+            this.constructLevel1()
+        );
     }
 
-    constructLevel1() {
+    constructLevel4() {
         return `
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,
@@ -40,7 +42,7 @@ export class LevelConfiguration {
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,`;
     }
 
-    constructLevel100() {
+    constructLevel4() {
         return `
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
