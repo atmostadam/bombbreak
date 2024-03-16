@@ -1,6 +1,6 @@
 import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
 import { Bomb } from "../model/Bomb.js";
-import { MouseListener } from "./../listener/MouseListener.js";
+import { Score } from "../model/Score.js";
 
 const images = new Map();
 
@@ -16,16 +16,14 @@ export async function loadImage(url) {
         .catch(e => console.error(e));
 }
 
-/**
- * The context for the game in reference to Inversion of Control, Shared Map Key/Values and Singleton
- * class lookup.
- */
 export class GameContext {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.map = new Map();
         this.clear();
+        this.levelConfiguration = new LevelConfiguration(this);
+        this.score = new Score(this);
     }
 
     putImage(url, image) {
@@ -52,44 +50,20 @@ export class GameContext {
         return this.levelConfiguration;
     }
 
-    getGrid() {
-        return this.grid;
-    }
-
-    setGrid(grid) {
-        this.grid = grid;
-    }
-
-    getBombs() {
-        return this.bombs
-    }
-
-    setBombs(bombs) {
-        this.bombs = bombs;
-    }
-
-    addBomb() {
-        this.bombs.push(new Bomb(this));
-    }
-
-    deleteBomb(bomb) {
-        this.bombs = this.bombs.filter(e => e !== bomb)
-    }
-
-    getPaddle() {
-        return this.paddle;
-    }
-
-    setPaddle(paddle) {
-        this.paddle = paddle;
-    }
-
     getScore() {
         return this.score;
     }
 
     setScore(score) {
         this.score = score;
+    }
+
+    getScreen() {
+        return this.screen;
+    }
+
+    setScreen(screen) {
+        this.screen = screen;
     }
 
     clear() {
@@ -134,7 +108,7 @@ export class GameContext {
         return this.getHeight();
     }
 
-    getWidtpercentH(percent) {
+    getWidthPercent(percent) {
         return this.getWidth() * (percent / 100);
     }
 
@@ -157,14 +131,5 @@ export class GameContext {
             y1 < y2 + h2 &&
             y1 + h1 > y2
         );
-    }
-
-    drawHitbox() {
-        let ctx = this.getCtx();
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "Orange";
-        ctx.rect(this.getLeft, this.getRight(), this.getTop(), this.getBottom());
-        ctx.stroke();
     }
 }

@@ -1,9 +1,22 @@
 import {
-    BRICK_BLUE_SRC, BRICK_GRAY_SRC, BRICK_GREEN_SRC, BRICK_ORANGE_SRC,
-    BRICK_PURPLE_SRC, BRICK_RED_SRC, BRICK_YELLOW_SRC, BOOM_SRC,
-    BRICK_EMPTY, BRICK_W, BRICK_H, BRICK_IX, BRICK_IY, BRICK_BOOM_NUMBER_OF_TICKS,
-    BRICK_GREEN_POINTS, BRICK_YELLOW_POINTS, BRICK_BLUE_POINTS,
-    BRICK_PURPLE_POINTS, BRICK_ORANGE_POINTS, BRICK_RED_POINTS
+    BOOM_SRC,
+    BRICK_BLUE_POINTS,
+    BRICK_BLUE_SRC,
+    BRICK_EMPTY,
+    BRICK_GRAY_SRC,
+    BRICK_GREEN_POINTS,
+    BRICK_GREEN_SRC,
+    BRICK_H, BRICK_IX, BRICK_IY,
+    BRICK_ORANGE_POINTS,
+    BRICK_ORANGE_SRC,
+    BRICK_PURPLE_POINTS,
+    BRICK_PURPLE_SRC,
+    BRICK_RED_POINTS,
+    BRICK_RED_SRC,
+    BRICK_W,
+    BRICK_YELLOW_POINTS,
+    BRICK_YELLOW_SRC,
+    brickBoomNumberOfTicks
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -57,7 +70,7 @@ export class Brick {
             case BRICK_GREEN_SRC:
                 this.state = BRICK_EMPTY;
                 this.context.getScore().increaseScore(BRICK_GREEN_POINTS);
-                this.finalTick = this.tick + BRICK_BOOM_NUMBER_OF_TICKS;
+                this.finalTick = this.tick + brickBoomNumberOfTicks;
                 break;
             case BRICK_YELLOW_SRC:
                 this.state = BRICK_GREEN_SRC;
@@ -83,7 +96,7 @@ export class Brick {
     }
 
     getX() {
-        return this.context.getWidtpercentH(this.percentX);
+        return this.context.getWidthPercent(this.percentX);
     }
 
     getY() {
@@ -91,7 +104,7 @@ export class Brick {
     }
 
     getSw() {
-        return this.context.getWidtpercentH(this.percentW);
+        return this.context.getWidthPercent(this.percentW);
     }
 
     getSh() {
