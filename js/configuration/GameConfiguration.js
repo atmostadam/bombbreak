@@ -2,8 +2,11 @@
 // Use variables instead of configuration files.
 
 export var bombBoomNumberOfTicks = 20;
-export var bombBoomSizeMultiplier = 6;
-export var bombDropTicks = 120;
+export var bombBoomSizeMultiplier = 5;
+export var bombExplosionMultiplier = 5;
+export var bombSpeedPercentX = 2;
+export var bombSpeedPercentY = 2;
+export var bombDropSpeedPercent = 3;
 
 export var brickBoomNumberOfTicks = 40;
 
@@ -19,9 +22,6 @@ export const BOMB_PERCENT_X = 45;
 export const BOMB_PERCENT_Y = 1;
 export const BOMB_PERCENT_WIDTH = 8;
 export const BOMB_PERCENT_HEIGHT = 8;
-export const BOMB_SPEED_PERCENT_X = 1.5;
-export const BOMB_SPEED_PERCENT_Y = 1.5;
-export const BOMB_DROP_SPEED_PERCENT = 2;
 export const BOMB_IX = 0;
 export const BOMB_IY = 0;
 export const BOMB_W = 1500;

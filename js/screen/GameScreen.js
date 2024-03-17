@@ -1,6 +1,5 @@
 import {
-    BRICK_EMPTY,
-    bombDropTicks
+    BRICK_EMPTY
 } from "./../configuration/GameConfiguration.js";
 import { Bomb } from "./../model/Bomb.js";
 import { Grid } from "./../model/Grid.js";
@@ -15,9 +14,6 @@ export class GameScreen {
     }
 
     update(tick) {
-        if (tick % bombDropTicks == 0) {
-            this.addBomb();
-        }
         this.bombs.forEach(b => b.update(tick));
         this.paddle.update(tick);
         this.context.getScore().update(tick);
@@ -52,8 +48,8 @@ export class GameScreen {
             if (this.context.checkCollision(
                 bomb.getX(),
                 bomb.getY(),
-                bomb.getSw(),
-                bomb.getSh(),
+                bomb.getW(),
+                bomb.getH(),
                 brick.getX(),
                 brick.getY(),
                 brick.getSw(),

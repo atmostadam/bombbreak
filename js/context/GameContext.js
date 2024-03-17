@@ -1,5 +1,4 @@
 import { LevelConfiguration } from "../configuration/LevelConfiguration.js";
-import { Bomb } from "../model/Bomb.js";
 import { Score } from "../model/Score.js";
 
 const images = new Map();
@@ -125,11 +124,15 @@ export class GameContext {
     }
 
     checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
-        return (
-            x1 < x2 + w2 &&
-            x1 + w1 > x2 &&
-            y1 < y2 + h2 &&
-            y1 + h1 > y2
-        );
+        return this.checkCollisionX(x1, w1, x2, w2) &&
+            this.checkCollisionY(y1, h1, y2, h2);
+    }
+
+    checkCollisionX(x1, w1, x2, w2) {
+        return x1 < x2 + w2 && x1 + w1 > x2;
+    }
+
+    checkCollisionY(y1, h1, y2, h2) {
+        return y1 < y2 + h2 && y1 + h1 > y2;
     }
 }
