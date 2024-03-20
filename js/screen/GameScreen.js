@@ -5,6 +5,7 @@ import { Bomb } from "./../model/Bomb.js";
 import { Grid } from "./../model/Grid.js";
 import { Paddle } from "./../model/Paddle.js";
 import { NextLevelScreen } from "./NextLevelScreen.js";
+import { RanOutOfLevelsScreen } from "./RanOutOfLevelsScreen.js";
 
 export class GameScreen {
     constructor(context) {
@@ -41,7 +42,11 @@ export class GameScreen {
         this.drawLevelNumber();
         this.drawLevelDesigner();
         if (this.grid.isEmpty()) {
-            this.context.setScreen(new NextLevelScreen(this.context));
+            if (this.context.getLevel() >= this.context.getLevelConfiguration().size()) {
+                this.context.setScreen(new RanOutOfLevelsScreen(this.context));
+            } else {
+                this.context.setScreen(new NextLevelScreen(this.context));
+            }
         }
     }
 
