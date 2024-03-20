@@ -10,14 +10,13 @@ import {
 import { Brick } from "./Brick.js";
 
 export class Grid {
-    constructor(context, level) {
+    constructor(context) {
         this.context = context;
-        this.level = level;
         this.numberOfRows = 30;
         this.numberOfColumns = 20;
         this.percentW = 100 / this.numberOfColumns;
         this.percentH = 100 / this.numberOfRows;
-        this.grid = this.createGrid(level);
+        this.grid = this.createGrid(this.context.getLevel());
     }
 
     update(tick) {
@@ -46,6 +45,17 @@ export class Grid {
 
     set(row, column, instance) {
         this.grid[row][column] = instance;
+    }
+
+    isEmpty() {
+        for (let r = 0; r < this.numberOfRows; r++) {
+            for (let c = 0; c < this.numberOfColumns; c++) {
+                if (!this.grid[r][c].isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     createGrid(levelNumber) {

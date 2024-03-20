@@ -1,13 +1,16 @@
+import { GameOverScreen } from "../screen/GameOverScreen.js";
 import {
     BOMB_H,
     BOMB_IX,
     BOMB_IY,
     BOMB_PERCENT_HEIGHT,
     BOMB_PERCENT_WIDTH,
-    BOMB_PERCENT_X, BOMB_PERCENT_Y, BOMB_SPEED_PERCENT_X,
-    BOMB_SPEED_PERCENT_Y,
+    BOMB_PERCENT_X, BOMB_PERCENT_Y,
+    bombSpeedPercentX,
+    bombSpeedPercentY,
     BOMB_SRC,
-    BOMB_STATE_BOMB, BOMB_STATE_BOOM,
+    BOMB_STATE_BOMB,
+    BOMB_STATE_BOOM,
     BOMB_STATE_DROPPING,
     BOMB_W,
     BOOM_H,
@@ -16,7 +19,8 @@ import {
     BOOM_W,
     BRICK_EMPTY,
     bombBoomNumberOfTicks,
-    bombBoomSizeMultiplier
+    bombBoomSizeMultiplier,
+    bombExplosionMultiplier
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -31,25 +35,30 @@ export class Bomb {
         this.context = context;
         this.percentX = BOMB_PERCENT_X;
         this.percentY = BOMB_PERCENT_Y;
-        this.speedPercentX = BOMB_SPEED_PERCENT_X;
-        this.speedPercentY = BOMB_SPEED_PERCENT_Y;
+        this.speedPercentX = bombSpeedPercentX;
+        this.speedPercentY = bombSpeedPercentY;
         this.state = BOMB_STATE_DROPPING;
     }
 
     update(tick) {
         this.tick = tick;
         if (BOMB_STATE_DROPPING == this.state) {
-            this.dropUntilTouchingPaddle();
+            if (this.bounceIfCollidingPaddle()) {
+                this.state = BOMB_STATE_BOMB;
+            }
+            this.gameOverIfCollidingBottomSide();
+            this.moveY();
         } else if (BOMB_STATE_BOMB == this.state) {
-            this.bounceIfTouchingPaddle();
-            this.bounceIfTouchingLeft();
-            this.bounceIfTouchingRight();
-            this.bounceIfTouchingTop();
-            this.bounceIfTouchingBottom();
-            this.percentX += this.speedPercentX;
-            this.percentY -= this.speedPercentY;
+            this.bounceIfCollidingPaddle();
+            this.bounceIfCollidingLeftSide();
+            this.bounceIfCollidingRightSide();
+            this.bounceIfCollidingTopSide();
+            this.gameOverIfCollidingBottomSide();
+            this.moveX();
+            this.moveY();
         } else if (BOMB_STATE_BOOM == this.state && this.tick > this.finalTick) {
             this.screen.deleteBomb(this);
+            this.screen.addBomb();
         }
     }
 
@@ -62,10 +71,10 @@ export class Bomb {
                 BOMB_IY,
                 BOMB_W,
                 BOMB_H,
-                this.getX() - (this.getSw() * .2),
-                this.getY() - (this.getSh() * .2),
-                this.getSw() * 1.2,
-                this.getSh() * 1.2
+                this.getX(),
+                this.getY(),
+                this.getW(),
+                this.getH()
             );
         } else if (this.state == BOMB_STATE_BOOM) {
             ctx.drawImage(
@@ -74,12 +83,28 @@ export class Bomb {
                 BOOM_IY,
                 BOOM_W,
                 BOOM_H,
-                this.getX() - (this.getSw() * 1.4),
-                this.getY() - (this.getSh() * 1.4),
-                this.getSw() * bombBoomSizeMultiplier,
-                this.getSh() * bombBoomSizeMultiplier
+                this.getBoomX(),
+                this.getBoomY(),
+                this.getBoomW(),
+                this.getBoomH()
             );
         }
+    }
+
+    moveX() {
+        this.percentX += this.speedPercentX;
+    }
+
+    moveY() {
+        this.percentY += this.speedPercentY;
+    }
+
+    bounceX() {
+        this.speedPercentX *= -1;
+    }
+
+    bounceY() {
+        this.speedPercentY *= -1;
     }
 
     onHit() {
@@ -89,10 +114,10 @@ export class Bomb {
                     var brick = this.grid.get(rowNumber, columnNumber);
                     if (brick && brick.getState() != BRICK_EMPTY) {
                         if (this.context.checkCollision(
-                            this.getX(),
-                            this.getY(),
-                            this.getSw(),
-                            this.getSh(),
+                            this.getExplosionX(),
+                            this.getExplosionY(),
+                            this.getExplosionW(),
+                            this.getExplosionH(),
                             brick.getX(),
                             brick.getY(),
                             brick.getSw(),
@@ -107,65 +132,99 @@ export class Bomb {
         }
     }
 
-    dropUntilTouchingPaddle() {
-        if (this.state == BOMB_STATE_DROPPING && this.bounceIfTouchingPaddle()) {
-            this.state = BOMB_STATE_BOMB;
-            return;
-        }
-        this.percentY += this.speedPercentY;
-    }
-
-    bounceIfTouchingPaddle() {
-        let paddle = this.paddle;
-        if (this.context.checkCollision(
-            paddle.getX(),
-            paddle.getY(),
-            paddle.getSw(),
-            paddle.getSh(),
-            this.getX(),
-            this.getY(),
-            this.getSw(),
-            this.getSh()
-        )) {
-            this.percentX += this.speedPercentX;
-            this.percentY += this.speedPercentY;
-            this.speedPercentX *= -1;
-            this.speedPercentY *= -1;
+    bounceIfCollidingPaddle() {
+        if (this.collidingPaddle()) {
+            if (this.collidingPaddleX()) {
+                this.bounceOnPaddle();
+                this.moveX();
+            }
+            if (this.collidingPaddleY()) {
+                this.bounceY();
+                this.moveY();
+            }
             return true;
         }
         return false;
     }
 
-    bounceIfTouchingLeft() {
-        this.speedPercentX *= this.touchingLeft() ? -1 : 1;
+    bounceOnPaddle() {
+        let paddleMiddleW = this.paddle.getW() / 2;
+        let paddleMiddleX = this.paddle.getX() + paddleMiddleW;
+        let bombMiddleX = this.getX() + (this.getW() / 2);
+        let paddleDistanceW =
+            bombMiddleX >= paddleMiddleX ?
+                bombMiddleX - paddleMiddleX :
+                -(paddleMiddleX - bombMiddleX);
+        this.speedPercentX = bombSpeedPercentX * (paddleDistanceW / paddleMiddleW);
+        this.speedPercentY = bombSpeedPercentY + (1 - Math.abs(this.speedPercentX));
     }
 
-    bounceIfTouchingRight() {
-        this.speedPercentX *= this.touchingRight() ? -1 : 1;
+    bounceIfCollidingLeftSide() {
+        if (this.collidingLeftSide()) {
+            this.bounceX();
+        }
     }
 
-    bounceIfTouchingTop() {
-        this.speedPercentY *= this.touchingTop() ? -1 : 1;
+    bounceIfCollidingRightSide() {
+        if (this.collidingRightSide()) {
+            this.bounceX();
+        }
     }
 
-    bounceIfTouchingBottom() {
-        this.speedPercentY *= this.touchingBottom() ? -1 : 1;
+    bounceIfCollidingTopSide() {
+        if (this.collidingTopSide()) {
+            this.bounceY();
+        }
     }
 
-    touchingLeft() {
-        return this.getX() < this.context.getLeft();
+    gameOverIfCollidingBottomSide() {
+        if (this.collidingBottomSide()) {
+            this.context.setScreen(new GameOverScreen(this.context));
+        }
     }
 
-    touchingRight() {
-        return this.getX() > this.context.getRight();
+    collidingPaddle() {
+        return this.context.checkCollision(
+            this.getX(),
+            this.getY(),
+            this.getW(),
+            this.getH(),
+            this.paddle.getX(),
+            this.paddle.getY(),
+            this.paddle.getW(),
+            this.paddle.getH());
     }
 
-    touchingTop() {
-        return this.getY() < this.context.getTop();
+    collidingPaddleX() {
+        return this.context.checkCollisionX(
+            this.paddle.getX(),
+            this.paddle.getW(),
+            this.getX(),
+            this.getW());
     }
 
-    touchingBottom() {
-        return this.getY() > this.context.getBottom();
+    collidingPaddleY() {
+        return this.context.checkCollisionY(
+            this.paddle.getY(),
+            this.paddle.getH(),
+            this.getY(),
+            this.getH());
+    }
+
+    collidingLeftSide() {
+        return this.getX() <= this.context.getLeft();
+    }
+
+    collidingRightSide() {
+        return this.getX() + this.getW() >= this.context.getRight();
+    }
+
+    collidingTopSide() {
+        return this.getY() <= this.context.getTop();
+    }
+
+    collidingBottomSide() {
+        return this.getY() + this.getH() >= this.context.getBottom();
     }
 
     getX() {
@@ -176,11 +235,43 @@ export class Bomb {
         return this.context.getHeightPercent(this.percentY);
     }
 
-    getSw() {
+    getW() {
         return this.context.getHeightPercent(BOMB_PERCENT_WIDTH);
     }
 
-    getSh() {
+    getH() {
         return this.context.getHeightPercent(BOMB_PERCENT_HEIGHT);
+    }
+
+    getExplosionX() {
+        return this.getX() - (this.getExplosionW() / 2);
+    }
+
+    getExplosionY() {
+        return this.getY() - (this.getExplosionH() / 2);
+    }
+
+    getExplosionW() {
+        return this.getW() * bombExplosionMultiplier;
+    }
+
+    getExplosionH() {
+        return this.getH() * bombExplosionMultiplier;
+    }
+
+    getBoomX() {
+        return this.getX() - (this.getBoomW() / 2);
+    }
+
+    getBoomY() {
+        return this.getY() - (this.getBoomH() / 2);
+    }
+
+    getBoomW() {
+        return this.getW() * bombBoomSizeMultiplier;
+    }
+
+    getBoomH() {
+        return this.getH() * bombBoomSizeMultiplier;
     }
 }

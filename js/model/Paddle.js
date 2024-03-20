@@ -1,6 +1,7 @@
 import {
     TRAMPOLINE_H,
-    TRAMPOLINE_IX, TRAMPOLINE_IY,
+    TRAMPOLINE_IX,
+    TRAMPOLINE_IY,
     TRAMPOLINE_PERCENT_H,
     TRAMPOLINE_PERCENT_W,
     TRAMPOLINE_PERCENT_Y,
@@ -30,8 +31,8 @@ export class Paddle {
             TRAMPOLINE_H,
             this.getX(),
             this.getY(),
-            this.getSw(),
-            this.getSh()
+            this.getW(),
+            this.getH()
         );
     }
 
@@ -43,11 +44,11 @@ export class Paddle {
         return this.context.getHeightPercent(TRAMPOLINE_PERCENT_Y);
     }
 
-    getSw() {
+    getW() {
         return this.context.getHeightPercent(TRAMPOLINE_PERCENT_W);
     }
 
-    getSh() {
+    getH() {
         return this.context.getHeightPercent(TRAMPOLINE_PERCENT_H);
     }
 }

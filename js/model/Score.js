@@ -7,10 +7,7 @@ import {
 export class Score {
     constructor(context) {
         this.context = context;
-        this.levelScore = 0;
-        this.highScore = 0;
-        this.gamesPlayed = 0;
-        this.maxLevel = 0;
+        this.newGame();
     }
 
     update(tick) {
@@ -21,74 +18,62 @@ export class Score {
         let ctx = this.context.getCtx();
         ctx.font = "48px Helvetica";
         ctx.fillStyle = "white";
-        ctx.fillText(this.levelScore, this.context.getWidth() - 100, 50);
+        ctx.fillText(this.levelScore, this.context.getWidth() - 150, 50);
     }
 
-    getLevelScore() {
-        return this.levelScore;
+    newGame() {
+        this.levelScore = 0;
+        this.gameScore = 0;
     }
 
-    setLevelScore(levelScore) {
-        this.levelScore = levelScore;
+    nextLevel() {
+        this.gameScore += this.levelScore;
+        this.levelScore = 0;
+        this.context.increaseLevelByOne();
+    }
+
+    gameOver() {
+        this.gameScore += this.levelScore;
+        this.levelScore = 0;
+        if (this.getGameScore() > this.getHighScore()) {
+            localStorage.setItem(HIGH_SCORE_KEY, this.getGameScore());
+        }
+        if (this.context.getLevel() > this.getMaxLevel()) {
+            localStorage.setItem(MAX_LEVEL_KEY, this.context.getLevel());
+        }
+        localStorage.setItem(GAMES_PLAYED_KEY, this.getGamesPlayed() + 1);
     }
 
     increaseScore(amount) {
         this.levelScore += amount;
     }
 
+    getLevelScore() {
+        return this.levelScore;
+    }
+
+    getGameScore() {
+        return this.gameScore;
+    }
+
     getHighScore() {
-        return this.highScore;
-    }
-
-    setHighScore(highScore) {
-        this.highScore = highScore;
-    }
-
-    getGamesPlayed() {
-        return this.gamesPlayed;
-    }
-
-    setGamesPlayed(gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
+        if (!localStorage.getItem(HIGH_SCORE_KEY)) {
+            localStorage.setItem(HIGH_SCORE_KEY, 0);
+        }
+        return Number(localStorage.getItem(HIGH_SCORE_KEY));
     }
 
     getMaxLevel() {
-        return this.maxLevel;
-    }
-
-    setMaxLevel(maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-
-    loadGame() {
-        let cookieHighScore = localStorage.getItem(HIGH_SCORE_KEY);
-        let cookieMaxLevel = localStorage.getItem(MAX_LEVEL_KEY);
-        let cookieGamesPlayed = localStorage.getItem(GAMES_PLAYED_KEY);
-        this.highScore = cookieHighScore ? cookieHighScore : 0;
-        this.maxLevel = cookieMaxLevel ? cookieMaxLevel : 1;
-        this.gamesPlayed = cookieGamesPlayed ? cookieGamesPlayed : 0;
-    }
-
-    nextLevel() {
-        this.highScore += this.levelScore;
-        this.levelScore = 0;
-        this.context.increaseLevelByOne();
-    }
-
-    gameOver() {
-        let cookieHighScore = localStorage.getItem(HIGH_SCORE_KEY);
-        let cookieMaxLevel = localStorage.getItem(MAX_LEVEL_KEY);
-        let cookieGamesPlayed = localStorage.getItem(GAMES_PLAYED_KEY);
-        this.highScore += this.levelScore;
-        this.levelScore = 0;
-        if (this.highScore > cookieHighScore) {
-            localStorage.setItem(HIGH_SCORE_KEY, this.highScore);
+        if (!localStorage.getItem(MAX_LEVEL_KEY)) {
+            localStorage.setItem(MAX_LEVEL_KEY, 0);
         }
-        if (this.maxLevel > cookieMaxLevel) {
-            localStorage.setItem(MAX_LEVEL_KEY, ++this.maxLevel);
+        return Number(localStorage.getItem(MAX_LEVEL_KEY));
+    }
+
+    getGamesPlayed() {
+        if (!localStorage.getItem(GAMES_PLAYED_KEY)) {
+            localStorage.setItem(GAMES_PLAYED_KEY, 0);
         }
-        if (this.currentGamesPlayed > cookieGamesPlayed) {
-            localStorage.setItem(GAMES_PLAYED_KEY, ++this.gamesPlayed);
-        }
+        return Number(localStorage.getItem(GAMES_PLAYED_KEY));
     }
 }

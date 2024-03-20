@@ -1,23 +1,20 @@
 import {
-    BRICK_EMPTY,
-    bombDropTicks
+    BRICK_EMPTY
 } from "./../configuration/GameConfiguration.js";
 import { Bomb } from "./../model/Bomb.js";
 import { Grid } from "./../model/Grid.js";
 import { Paddle } from "./../model/Paddle.js";
+import { NextLevelScreen } from "./NextLevelScreen.js";
 
 export class GameScreen {
     constructor(context) {
         this.context = context;
-        this.grid = new Grid(this.context, 1);
+        this.grid = new Grid(this.context);
         this.paddle = new Paddle(this.context);
         this.bombs = [new Bomb(this.context, this, this.grid, this.paddle)];
     }
 
     update(tick) {
-        if (tick % bombDropTicks == 0) {
-            this.addBomb();
-        }
         this.bombs.forEach(b => b.update(tick));
         this.paddle.update(tick);
         this.context.getScore().update(tick);
@@ -41,6 +38,28 @@ export class GameScreen {
         this.bombs.forEach(b => b.draw());
         this.paddle.draw();
         this.context.getScore().draw();
+        this.drawLevelNumber();
+        this.drawLevelDesigner();
+        if (this.grid.isEmpty()) {
+            this.context.setScreen(new NextLevelScreen(this.context));
+        }
+    }
+
+    drawLevelNumber() {
+        let ctx = this.context.getCtx();
+        ctx.font = "48px Helvetica";
+        ctx.fillStyle = "white";
+        ctx.fillText("LEVEL " + this.context.getLevel(), 15, 50);
+    }
+
+    drawLevelDesigner() {
+        let ctx = this.context.getCtx();
+        ctx.font = "12pt Helvetica";
+        ctx.fillStyle = "white";
+        ctx.fillText(
+            "Level Designed by: " + this.context.getLevelConfiguration().getLevelDesigner(this.context.getLevel()),
+            this.context.getWidth() - 200,
+            this.context.getHeight() - 30);
     }
 
     onClick(x, y) {
@@ -52,8 +71,8 @@ export class GameScreen {
             if (this.context.checkCollision(
                 bomb.getX(),
                 bomb.getY(),
-                bomb.getSw(),
-                bomb.getSh(),
+                bomb.getW(),
+                bomb.getH(),
                 brick.getX(),
                 brick.getY(),
                 brick.getSw(),
