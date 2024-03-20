@@ -1,4 +1,7 @@
 // AWS blocks js access to load csv files without paid Amazon IAM.
+
+import { RanOutOfLevelsScreen } from "./../screen/RanOutOfLevelsScreen.js";
+
 // Use variables instead of configuration files.
 export class LevelConfiguration {
     constructor() {
@@ -9,6 +12,11 @@ export class LevelConfiguration {
             this.constructLevel3(),
             this.constructLevel4()
         );
+        this.levelDesignerMap = new Map();
+        this.levelDesignerMap.set(1, "Nathan");
+        this.levelDesignerMap.set(2, "Rachel");
+        this.levelDesignerMap.set(3, "Mom");
+        this.levelDesignerMap.set(4, "Dad");
     }
 
     constructLevel1() {
@@ -182,6 +190,10 @@ export class LevelConfiguration {
     }
 
     getLevel(levelNumber, numberOfRows, numberOfColumns) {
+        if (levelNumber - 1 > this.levels.length) {
+            this.getContext.setScreen(new RanOutOfLevelsScreen(this.context));
+            return;
+        }
         let rows = this.levels[levelNumber - 1].split("\n");
         let level = [];
         for (let r = 0; r < numberOfRows + 1; r++) {
@@ -196,5 +208,9 @@ export class LevelConfiguration {
             level.push(arr);
         }
         return level;
+    }
+
+    getLevelDesigner(levelNumber) {
+        return this.levelDesignerMap.get(levelNumber);
     }
 }

@@ -8,7 +8,7 @@ export var bombSpeedPercentX = 2;
 export var bombSpeedPercentY = 2;
 export var bombDropSpeedPercent = 3;
 
-export var brickBoomNumberOfTicks = 40;
+export var explosionNumberOfTicks = 20;
 
 export const BOMB_STATE_BOMB = "bomb";
 export const BOMB_STATE_BOOM = "boom";
@@ -37,7 +37,7 @@ export const TRAMPOLINE_SRC = "./images/publicdomain/public-domain-trampoline.pn
 export const TRAMPOLINE_IX = 0;
 export const TRAMPOLINE_IY = 0;
 export const TRAMPOLINE_W = 600;
-export const TRAMPOLINE_H = 302;
+export const TRAMPOLINE_H = 300;
 export const TRAMPOLINE_PERCENT_Y = 90;
 export const TRAMPOLINE_PERCENT_W = 20;
 export const TRAMPOLINE_PERCENT_H = 10;
@@ -60,3 +60,7 @@ export const BRICK_BLUE_POINTS = 400;
 export const BRICK_PURPLE_POINTS = 800;
 export const BRICK_ORANGE_POINTS = 1600;
 export const BRICK_RED_POINTS = 3200;
+
+export const EXPLOSION_SRC = "./images/publicdomain/public-domain-explosion.png";
+export const EXPLOSION_W = 1500;
+export const EXPLOSION_H = 1000;

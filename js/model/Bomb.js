@@ -228,11 +228,11 @@ export class Bomb {
     }
 
     getX() {
-        return this.context.getWidthPercent(this.percentX) - (this.getW() / 2);
+        return this.context.getWidthPercent(this.percentX);
     }
 
     getY() {
-        return this.context.getHeightPercent(this.percentY) - (this.getH() / 2);
+        return this.context.getHeightPercent(this.percentY);
     }
 
     getW() {

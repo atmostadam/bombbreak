@@ -21,6 +21,7 @@ export class GameContext {
         this.ctx = ctx;
         this.map = new Map();
         this.clear();
+        this.level = 1;
         this.levelConfiguration = new LevelConfiguration(this);
         this.score = new Score(this);
     }
@@ -65,6 +66,18 @@ export class GameContext {
         this.screen = screen;
     }
 
+    getLevel() {
+        return this.level;
+    }
+
+    setLevel(level) {
+        this.level = level;
+    }
+
+    increaseLevelByOne() {
+        this.level++;
+    }
+
     clear() {
         let canvasW = this.canvas.width;
         let canvasH = this.canvas.height;
@@ -81,6 +94,19 @@ export class GameContext {
         let ctx = this.getCtx();
         ctx.clearRect(0, 0, this.getWidth(), this.getHeight());
 
+    }
+
+    checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return this.checkCollisionX(x1, w1, x2, w2) &&
+            this.checkCollisionY(y1, h1, y2, h2);
+    }
+
+    checkCollisionX(x1, w1, x2, w2) {
+        return x1 < x2 + w2 && x1 + w1 > x2;
+    }
+
+    checkCollisionY(y1, h1, y2, h2) {
+        return y1 < y2 + h2 && y1 + h1 > y2;
     }
 
     getWidth() {
@@ -121,18 +147,5 @@ export class GameContext {
 
     getBoundingClientRect() {
         return this.canvas.getBoundingClientRect();
-    }
-
-    checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
-        return this.checkCollisionX(x1, w1, x2, w2) &&
-            this.checkCollisionY(y1, h1, y2, h2);
-    }
-
-    checkCollisionX(x1, w1, x2, w2) {
-        return x1 < x2 + w2 && x1 + w1 > x2;
-    }
-
-    checkCollisionY(y1, h1, y2, h2) {
-        return y1 < y2 + h2 && y1 + h1 > y2;
     }
 }

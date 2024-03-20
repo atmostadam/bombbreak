@@ -1,9 +1,6 @@
-import { GameScreen } from "./GameScreen.js";
-
-export class NextLevelScreen {
+export class RanOutOfLevelsScreen {
     constructor(context) {
         this.context = context;
-        this.context.getScore().nextLevel();
     }
 
     update(tick) {
@@ -15,12 +12,8 @@ export class NextLevelScreen {
         ctx.font = "50pt Helvetica";
         ctx.fillStyle = "white";
         ctx.fillText(
-            "Click for NEXT LEVEL",
-            this.context.getWidthPercent(40),
+            "Rachel & Nathan - BUILD MORE LEVELS!!!",
+            this.context.getWidthPercent(20),
             this.context.getHeightPercent(48));
-    }
-
-    onClick(x, y) {
-        this.context.setScreen(new GameScreen(this.context));
     }
 }

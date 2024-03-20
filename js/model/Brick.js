@@ -1,12 +1,12 @@
 import {
-    BOOM_SRC,
+    EXPLOSION_SRC,
     BRICK_BLUE_POINTS,
     BRICK_BLUE_SRC,
     BRICK_EMPTY,
     BRICK_GRAY_SRC,
     BRICK_GREEN_POINTS,
     BRICK_GREEN_SRC,
-    BRICK_H, BRICK_IX, BRICK_IY,
+    BRICK_H,
     BRICK_ORANGE_POINTS,
     BRICK_ORANGE_SRC,
     BRICK_PURPLE_POINTS,
@@ -16,7 +16,9 @@ import {
     BRICK_W,
     BRICK_YELLOW_POINTS,
     BRICK_YELLOW_SRC,
-    brickBoomNumberOfTicks
+    explosionNumberOfTicks,
+    EXPLOSION_W,
+    EXPLOSION_H
 } from "./../configuration/GameConfiguration.js";
 import { loadImage } from "./../context/GameContext.js";
 
@@ -27,7 +29,7 @@ await loadImage(BRICK_ORANGE_SRC);
 await loadImage(BRICK_PURPLE_SRC);
 await loadImage(BRICK_RED_SRC);
 await loadImage(BRICK_YELLOW_SRC);
-await loadImage(BOOM_SRC);
+await loadImage(EXPLOSION_SRC);
 
 export class Brick {
     constructor(context, percentX, percentY, percentW, percentH) {
@@ -52,12 +54,20 @@ export class Brick {
             return;
         }
         let ctx = this.context.getCtx();
+        if (EXPLOSION_SRC == this.state) {
+            var w = EXPLOSION_W;
+            var h = EXPLOSION_H;
+            // TODO: Add some fireworks
+        } else {
+            var w = BRICK_W;
+            var h = BRICK_H;
+        }
         ctx.drawImage(
             this.context.getImage(this.state),
-            BRICK_IX,
-            BRICK_IY,
-            BRICK_W,
-            BRICK_H,
+            0,
+            0,
+            w,
+            h,
             this.getX(),
             this.getY(),
             this.getSw(),
@@ -68,9 +78,9 @@ export class Brick {
     onHit() {
         switch (this.state) {
             case BRICK_GREEN_SRC:
-                this.state = BRICK_EMPTY;
+                this.state = EXPLOSION_SRC;
                 this.context.getScore().increaseScore(BRICK_GREEN_POINTS);
-                this.finalTick = this.tick + brickBoomNumberOfTicks;
+                this.finalTick = this.tick + explosionNumberOfTicks;
                 break;
             case BRICK_YELLOW_SRC:
                 this.state = BRICK_GREEN_SRC;
@@ -113,6 +123,13 @@ export class Brick {
 
     getState() {
         return this.state;
+    }
+
+    isEmpty() {
+        if (BRICK_EMPTY == this.state || EXPLOSION_SRC == this.state) {
+            return true;
+        }
+        return false;
     }
 
     setState(state) {

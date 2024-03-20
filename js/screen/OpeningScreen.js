@@ -20,6 +20,7 @@ export class OpeningScreen {
     }
 
     onClick(x, y) {
+        this.context.getScore().newGame();
         this.context.setScreen(new GameScreen(this.context));
     }
 }
