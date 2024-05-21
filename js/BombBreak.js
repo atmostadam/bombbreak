@@ -1,6 +1,6 @@
 import { GameContext } from "./context/GameContext.js";
 import { MouseListener } from "./listener/MouseListener.js";
-import { OpeningScreen } from "./screen/OpeningScreen.js";
+import { TitleScreen } from "./screen/TitleScreen.js";
 
 window.addEventListener("load", function () {
     const minMsPerFrame = 1000 / 60;
@@ -37,7 +37,7 @@ export class BombBreak {
     constructor(context) {
         this.context = context;
         this.context.setMouseListener(new MouseListener(this.context));
-        this.context.setScreen(new OpeningScreen(this.context));
+        this.context.setScreen(new TitleScreen(this.context));
     }
 
     update(tick) {

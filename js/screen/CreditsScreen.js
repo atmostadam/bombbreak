@@ -1,4 +1,4 @@
-import { OpeningScreen } from "./OpeningScreen.js";
+import { TitleScreen } from "./TitleScreen.js";
 
 export class CreditsScreen {
     constructor(context) {
@@ -14,6 +14,6 @@ export class CreditsScreen {
     }
 
     onClick(x, y) {
-        this.context.setScreen(new OpeningScreen(this.context));
+        this.context.setScreen(new TitleScreen(this.context));
     }
 }

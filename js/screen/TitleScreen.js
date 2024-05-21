@@ -1,6 +1,6 @@
 import { GameScreen } from "./GameScreen.js";
 
-export class OpeningScreen {
+export class TitleScreen {
     constructor(context) {
         this.context = context;
     }
