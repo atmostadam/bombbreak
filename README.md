@@ -4,7 +4,12 @@ Vanilla JavaScript. License is Public Domain CC0.
 
 # How to Create a Level
 
-* P = Purple
+* R = Red = 6 Hits
+* O = Orange = 5 Hits
+* P = Purple = 4 Hits
+* B = Blue = 3 Hits
+* Y = Yellow = 2 Hits
+* G = Green = 1 Hit
 
 Fill out the comma separated values such as:
 
